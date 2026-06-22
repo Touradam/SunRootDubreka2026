@@ -2131,6 +2131,14 @@
           trackerNextDueNote.textContent = isFrench() ? "Aucune date d'echeance definie. Ajoutez des dates ci-dessous." : "No due dates set yet. Add due dates for phases below.";
           return;
         }
+        if (!closest.overdue && state.activePhase !== closest.phase.id) {
+          state.activePhase = closest.phase.id;
+          saveState();
+          renderCurrentPhase();
+          renderPhaseNav();
+          renderPhaseCards();
+          renderPhaseTracker();
+        }
         const now = Date.now();
         const diffMs = closest.dueAt - now;
         if (closest.overdue) {
