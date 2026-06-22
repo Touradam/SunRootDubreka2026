@@ -367,6 +367,16 @@
       padding: 0.65rem 1.15rem 1rem;
     }
 
+    .stats-col-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .stats-col-link:hover .stats-value,
+    .stats-col-link:focus-visible .stats-value {
+      color: var(--gold);
+    }
+
     .stats-value {
       font-family: "Outfit", system-ui, sans-serif;
       color: var(--gold-light);
@@ -1094,10 +1104,10 @@
       <div class="container hero-grid">
         <div class="hero-head">
           <div class="stats-pill hero-top-pill tilt-card reveal-on-scroll">
-            <div class="stats-col">
+            <a class="stats-col stats-col-link" href="https://www.sunroots.energy/" target="_blank" rel="noopener noreferrer" aria-label="Open Sunroots website">
               <span class="stats-value">SUNROOT</span>
               <span class="stats-label" id="statsLabelLeft">Pilot</span>
-            </div>
+            </a>
             <div class="stats-divider"></div>
             <div class="stats-col">
               <span class="stats-value">Dubreka 2026</span>
