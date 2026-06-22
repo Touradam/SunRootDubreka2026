@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SunRoots Dubreka Print Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #c4a35a;
+      --gold-light: #e2c887;
+      --gold-dark: #9a7b3c;
+      --gold-glow: rgba(196, 163, 90, 0.35);
+      --ink: #0c0c0f;
+      --ink-raised: #12121a;
+      --surface: #18181f;
+      --surface-hover: #1f1f28;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-gold: rgba(196, 163, 90, 0.25);
+      --text: #eceae4;
+      --text-muted: #9c9a94;
+      --text-dim: #6b6963;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      line-height: 1.66;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse 72% 50% at 50% -8%, rgba(196, 163, 90, 0.16) 0%, transparent 55%),
+        var(--ink);
+    }
+
+    h1, h2, h3 {
+      font-family: "Outfit", system-ui, sans-serif;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.6rem;
+    }
+
+    h2 {
+      font-size: clamp(1.45rem, 2.8vw, 2rem);
+      margin: 0 0 0.65rem;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      margin: 0 0 0.42rem;
+    }
+
+    p {
+      margin: 0.4rem 0;
+      color: var(--text-muted);
+    }
+
+    ul, ol {
+      margin: 0.35rem 0 0.8rem 1.2rem;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin: 0.24rem 0;
+    }
+
+    strong {
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 76rem;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 2.4rem;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--border);
+      background: rgba(12, 12, 15, 0.94);
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar-inner {
+      max-width: 76rem;
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-family: "Outfit", system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.72rem 1.15rem;
+      border-radius: 0.76rem;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: transform 260ms var(--ease), border-color 260ms var(--ease), box-shadow 260ms var(--ease), background 260ms var(--ease), color 260ms var(--ease);
+      cursor: pointer;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid rgba(226, 200, 135, 0.88);
+      outline-offset: 2px;
+    }
+
+    .btn-secondary {
+      border-color: var(--border-gold);
+      color: var(--gold);
+      background: transparent;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(196, 163, 90, 0.09);
+    }
+
+    .btn-primary {
+      border: 0;
+      color: #0c0c0f;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 52%, var(--gold-dark) 100%);
+      box-shadow: 0 4px 24px var(--gold-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px var(--gold-glow);
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .mode-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      border: 1px solid var(--border-gold);
+      border-radius: 0.7rem;
+      padding: 0.48rem 0.66rem;
+      color: var(--gold-light);
+      background: rgba(196, 163, 90, 0.08);
+      font-size: 0.84rem;
+      min-height: 44px;
+    }
+
+    .mode-toggle input {
+      accent-color: var(--gold);
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #1f1f28 0%, #12121a 100%);
+      border: 1px solid rgba(196, 163, 90, 0.25);
+      border-radius: 1.15rem;
+      padding: 1.4rem;
+      margin-top: 1rem;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.36);
+    }
+
+    .hero-subtitle {
+      margin-top: 0.4rem;
+      color: var(--text-muted);
+    }
+
+    .hero-meta {
+      margin-top: 0.95rem;
+      display: grid;
+      gap: 0.4rem;
+      font-size: 0.92rem;
+    }
+
+    .section-card {
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: var(--surface);
+      padding: 1.1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .section-card:hover {
+      border-color: var(--border-gold);
+      background: var(--surface-hover);
+    }
+
+    .quick-guide {
+      margin-top: 1rem;
+      border: 1px solid var(--border-gold);
+      border-radius: 0.9rem;
+      background: rgba(196, 163, 90, 0.08);
+      padding: 0.95rem 1rem;
+    }
+
+    .quick-guide h2 {
+      margin-bottom: 0.45rem;
+    }
+
+    .quick-guide ol {
+      margin-bottom: 0;
+    }
+
+    .mono {
+      white-space: pre-wrap;
+      font-family: "Cambria Math", "Times New Roman", Georgia, serif;
+      color: var(--gold-light);
+      border: 1px solid var(--border-gold);
+      border-radius: 0.8rem;
+      background: rgba(196, 163, 90, 0.08);
+      padding: 0.9rem;
+      margin-top: 0.55rem;
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 0.6rem 0 0;
+      padding: 0;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .checklist li {
+      border: 1px solid var(--border);
+      border-radius: 0.72rem;
+      background: #121219;
+      padding: 0.62rem 0.75rem;
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    .latex-block {
+      margin-top: 0.55rem;
+      border: 1px solid var(--border-gold);
+      border-radius: 0.8rem;
+      background: rgba(196, 163, 90, 0.08);
+      padding: 0.8rem;
+      font-family: "Cambria Math", "Times New Roman", Georgia, serif;
+      color: var(--gold-light);
+      white-space: pre-wrap;
+      display: none;
+    }
+
+    body.engineering-mode .latex-block {
+      display: block;
+    }
+
+    body.engineering-mode .section-card {
+      border-color: rgba(196, 163, 90, 0.38);
+      background: linear-gradient(145deg, #1c1c25 0%, #12121a 100%);
+    }
+
+    body.engineering-mode h2::after {
+      content: " · Engineering";
+      font-size: 0.55em;
+      color: var(--gold);
+      margin-left: 0.35rem;
+      letter-spacing: 0.04em;
+    }
+
+    @media (min-width: 640px) {
+      .page {
+        padding: 1.4rem 2rem 2.7rem;
+      }
+      .topbar-inner {
+        padding-inline: 2rem;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        color: #111;
+        font-family: Georgia, "Times New Roman", serif;
+      }
+      .topbar {
+        display: none;
+      }
+      .page {
+        max-width: none;
+        padding: 0;
+      }
+      .hero,
+      .section-card,
+      .quick-guide,
+      .mono,
+      .checklist li {
+        box-shadow: none;
+        border: 1px solid #bbb;
+        background: #fff;
+        color: #111;
+      }
+      .hero,
+      .quick-guide,
+      .section-card {
+        page-break-inside: avoid;
+      }
+      h2, h3 {
+        page-break-after: avoid;
+      }
+      li {
+        page-break-inside: avoid;
+      }
+      p, li {
+        color: #222;
+      }
+      h1, h2, h3, strong {
+        color: #111;
+      }
+      .mono {
+        color: #222;
+      }
+
+      body.engineering-mode {
+        font-family: "Cambria Math", "Times New Roman", Georgia, serif;
+      }
+
+      body.engineering-mode .latex-block {
+        display: block;
+        border-color: #999;
+        background: #f7f7f7;
+        color: #111;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <p class="eyebrow">SunRoots Dubreka</p>
+      <div class="control-row">
+        <label class="mode-toggle" for="engineeringModeReport">
+          Engineering Mode
+          <input id="engineeringModeReport" type="checkbox" />
+        </label>
+        <a class="btn btn-secondary" href="index.html">Back to Dashboard</a>
+        <button type="button" class="btn btn-primary" id="downloadPdfBtn">Print Guide</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <h1>SunRoots Dubreka Solar Irrigation Pilot</h1>
+      <p class="hero-subtitle">Print Guide & Electrical Installation Guide</p>
+      <p class="hero-subtitle">Electrical & Solar PV Components Only</p>
+      <div class="hero-meta">
+        <p><strong>Project Location:</strong> Dubreka, Guinea</p>
+        <p><strong>Coordinates:</strong> 9.7898126, -13.4745297</p>
+      </div>
+    </section>
+
+    <section class="quick-guide">
+      <h2>Quick Field Sequence</h2>
+      <ol>
+        <li>Confirm panel Voc values and ensure total series Voc stays below <strong>160 V</strong>.</li>
+        <li>Install three identical 500-600 W modules in series and keep orientation strictly <strong>South</strong> at <strong>10 degrees</strong>.</li>
+        <li>Install one <strong>18-35 A DC breaker</strong> between array and controller before commissioning.</li>
+        <li>Verify clean/dry MC4 connectors, then start and confirm pump operation under sunlight.</li>
+      </ol>
+    </section>
+
+    <section class="section-card">
+      <h2>1. System Overview</h2>
+      <h3>System Description</h3>
+      <p>The irrigation system is powered directly by solar energy without batteries.</p>
+      <h3>Main Components</h3>
+      <ul>
+        <li><strong>3 Solar PV Modules (500-600 W each)</strong></li>
+        <li><strong>DC Disconnect Breaker (18-35 A MCB)</strong></li>
+        <li><strong>Ennos 1.5 HP (1.1 kW) DC Sunlight Pump</strong></li>
+        <li><strong>Integrated MPPT Controller</strong></li>
+        <li><strong>Water Pump and Motor</strong></li>
+      </ul>
+      <h3>Operating Principle</h3>
+      <ol>
+        <li>Sunlight produces electricity from the solar panels.</li>
+        <li>The three panels supply DC power to the Ennos MPPT controller.</li>
+        <li>The controller automatically adjusts to obtain maximum power from the solar array.</li>
+        <li>The controller powers the pump directly.</li>
+        <li>Pump performance increases with available sunlight.</li>
+      </ol>
+      <p><strong>No batteries are required.</strong></p>
+      <div class="latex-block">\textbf{Direct-Drive Model}
+P_{solar}(t) -> MPPT -> P_{pump}(t)
+\eta_{storage} = 1 \text{ (water elevation instead of batteries)}</div>
+    </section>
+
+    <section class="section-card">
+      <h2>2. Solar Panel Selection & Installation</h2>
+      <h3>Solar Panel Requirements</h3>
+      <p>Use <strong>three identical solar panels</strong> rated between <strong>500 W and 600 W</strong>.</p>
+      <h3>Critical Voltage Requirement</h3>
+      <ul>
+        <li>Maximum controller input voltage (Voc): <strong>160 V</strong></li>
+        <li>Each panel <strong>MUST have an Open Circuit Voltage (Voc) below 53 V</strong></li>
+      </ul>
+      <p>Example:</p>
+      <ul>
+        <li>Panel Voc = 52 V</li>
+        <li>Total series Voc = 52 + 52 + 52 = <strong>156 V Safe</strong></li>
+      </ul>
+      <p><strong>Never exceed 160 V.</strong></p>
+      <p>For best performance, select panels with a combined series Voc as close as possible to 160 V while remaining below the limit.</p>
+      <div class="latex-block">\textbf{Voltage Constraint}
+V_{oc,total} = V_{oc,1} + V_{oc,2} + V_{oc,3}
+V_{oc,total} < 160\text{V}, \quad V_{oc,panel} < 53\text{V}</div>
+
+      <h3>Panel Orientation</h3>
+      <h3>Direction</h3>
+      <ul>
+        <li>Face the solar panels <strong>strictly South</strong>.</li>
+      </ul>
+      <p>This provides the highest annual energy production in Dubreka.</p>
+      <h3>Tilt Angle</h3>
+      <p>Set the panel tilt to: <strong>10 degrees</strong></p>
+      <p>This corresponds approximately to the local latitude (9.8 degrees) and provides optimal year-round performance.</p>
+
+      <h3>Shading</h3>
+      <p>Solar panels must receive full sunlight.</p>
+      <p>Avoid:</p>
+      <ul>
+        <li>Trees</li>
+        <li>Bushes</li>
+        <li>Buildings</li>
+        <li>Utility poles</li>
+        <li>Any object creating shadows</li>
+      </ul>
+      <p>Even a small shadow can significantly reduce pump performance.</p>
+      <p>If vegetation cannot be removed, install longer cables and move the solar array to a better location.</p>
+    </section>
+
+    <section class="section-card">
+      <h2>3. Electrical Wiring & Protection</h2>
+      <h3>Series Connection</h3>
+      <p>Connect the three panels <strong>in series</strong>.</p>
+      <p>Connection order:</p>
+      <div class="mono">Panel 1 (+) -> Panel 2 (-)
+Panel 2 (+) -> Panel 3 (-)
+
+Remaining free positive (+)
+and free negative (-)
+go to the DC breaker,
+then to the Ennos controller.</div>
+      <p>Series connection increases voltage while maintaining the same current.</p>
+      <div class="latex-block">\textbf{Series Property}
+V_{series} = \sum V_i,\quad I_{series} \approx I_{panel}</div>
+
+      <h3>DC Breaker (Mandatory)</h3>
+      <p>Install one: <strong>18-35 A DC Electrical Breaker (MCB)</strong> between the solar array and the pump controller.</p>
+      <h3>Purpose</h3>
+      <ul>
+        <li>Safe system isolation</li>
+        <li>Protection during maintenance</li>
+        <li>Prevention of short-circuit sparks</li>
+        <li>Protection of the MPPT controller</li>
+      </ul>
+      <p><strong>The system must never be installed without this breaker.</strong></p>
+
+      <h3>Breaker Location</h3>
+      <p>Install the breaker:</p>
+      <ul>
+        <li>As close as possible to the solar panels</li>
+        <li>Inside a weather-protected enclosure</li>
+      </ul>
+      <p>This minimizes overvoltage risks and improves system safety.</p>
+
+      <h3>Cable Length</h3>
+      <p>If the solar array voltage is close to <strong>150-160 V</strong>, limit the cable distance between the panels and the breaker/controller to: <strong>Maximum: 15 meters</strong></p>
+      <p>Longer cables may increase electrical stress and reduce reliability.</p>
+
+      <h3>MC4 Connector Handling</h3>
+      <p>Always keep MC4 connectors:</p>
+      <ul>
+        <li>Clean</li>
+        <li>Dry</li>
+        <li>Free from dust</li>
+        <li>Free from mud</li>
+      </ul>
+      <p>Never leave loose connectors on the ground.</p>
+      <p>Dirty connectors can:</p>
+      <ul>
+        <li>Prevent proper electrical contact</li>
+        <li>Create resistance</li>
+        <li>Cause overheating</li>
+        <li>Produce electrical faults</li>
+        <li>Reduce system performance</li>
+      </ul>
+    </section>
+
+    <section class="section-card">
+      <h2>4. Operation & Maintenance</h2>
+      <h3>Solar Module Cleaning</h3>
+      <p>Inspect regularly.</p>
+      <p>Remove:</p>
+      <ul>
+        <li>Dust</li>
+        <li>Dirt</li>
+        <li>Bird droppings</li>
+        <li>Leaves</li>
+      </ul>
+      <p>Clean using:</p>
+      <ul>
+        <li>Soft wet cloth or sponge</li>
+        <li>Clean water</li>
+      </ul>
+      <p>Do not use abrasive materials or harsh chemicals.</p>
+      <p>Clean modules produce more power.</p>
+
+      <h3>Vegetation Management</h3>
+      <p>Inspect the area regularly.</p>
+      <p>Trim:</p>
+      <ul>
+        <li>Grass</li>
+        <li>Bushes</li>
+        <li>Tree branches</li>
+      </ul>
+      <p>Prevent any new shading throughout the year.</p>
+
+      <h3>System Monitoring</h3>
+      <p>The Ennos controller includes:</p>
+      <ul>
+        <li>LED display</li>
+        <li>Bluetooth communication</li>
+      </ul>
+      <p>Use the <strong>Innovex REMOT / Ennos App</strong> to:</p>
+      <ul>
+        <li>Check operating status</li>
+        <li>Monitor solar input</li>
+        <li>View pump performance</li>
+        <li>Identify faults</li>
+        <li>Support troubleshooting</li>
+      </ul>
+      <p>Check system status regularly, especially during the dry season.</p>
+    </section>
+
+    <section class="section-card">
+      <h2>5. Safety Golden Rules</h2>
+      <h3>Rule 1 - Never Exceed 160 V</h3>
+      <p>Before installation:</p>
+      <ul>
+        <li>Verify the Voc of each solar panel.</li>
+        <li>Ensure the total series Voc is <strong>below 160 V</strong>.</li>
+      </ul>
+      <p><strong>Exceeding 160 V can permanently damage the controller.</strong></p>
+
+      <h3>Rule 2 - Face South at 10 Degrees</h3>
+      <p>Always install the solar array:</p>
+      <ul>
+        <li>Facing <strong>South</strong></li>
+        <li>Tilted at <strong>10 degrees</strong></li>
+      </ul>
+      <p>Incorrect orientation reduces water production.</p>
+
+      <h3>Rule 3 - Install the DC Breaker</h3>
+      <p>Every system must include an: <strong>18-35 A DC breaker</strong> between the solar panels and the pump controller.</p>
+      <p>Never bypass or remove this protection device.</p>
+
+      <h3>Rule 4 - Keep MC4 Connectors Clean</h3>
+      <p>Never place MC4 connectors on:</p>
+      <ul>
+        <li>Mud</li>
+        <li>Sand</li>
+        <li>Dust</li>
+        <li>Wet ground</li>
+      </ul>
+      <p>Always inspect and clean connectors before making electrical connections.</p>
+      <p>Clean connectors ensure reliable operation and prevent electrical faults.</p>
+    </section>
+
+    <section class="section-card">
+      <h2>Installation Checklist</h2>
+      <ul class="checklist">
+        <li>Three identical 500-600 W solar panels installed</li>
+        <li>Each panel Voc is below 53 V</li>
+        <li>Total series Voc is below 160 V</li>
+        <li>Panels connected in series</li>
+        <li>18-35 A DC breaker installed near the solar array</li>
+        <li>Cable length less than 15 m when operating near 150-160 V</li>
+        <li>Panels face South</li>
+        <li>Panel tilt set to 10 degrees</li>
+        <li>No shading on the modules</li>
+        <li>MC4 connectors are clean and fully locked</li>
+        <li>LED display and Bluetooth monitoring verified</li>
+        <li>System tested under sunlight and pump operation confirmed</li>
+      </ul>
+    </section>
+  </main>
+  <script>
+    (function () {
+      "use strict";
+      const ENGINEERING_KEY = "sunroots_report_engineering_mode";
+      const modeToggle = document.getElementById("engineeringModeReport");
+      const downloadButton = document.getElementById("downloadPdfBtn");
+
+      function setEngineeringMode(enabled) {
+        document.body.classList.toggle("engineering-mode", enabled);
+        localStorage.setItem(ENGINEERING_KEY, String(enabled));
+      }
+
+      function initMode() {
+        const saved = localStorage.getItem(ENGINEERING_KEY) === "true";
+        modeToggle.checked = saved;
+        setEngineeringMode(saved);
+      }
+
+      function downloadPdf() {
+        window.print();
+      }
+
+      modeToggle.addEventListener("change", () => {
+        setEngineeringMode(modeToggle.checked);
+      });
+
+      downloadButton.addEventListener("click", downloadPdf);
+      initMode();
+    })();
+  </script>
+</body>
+</html>

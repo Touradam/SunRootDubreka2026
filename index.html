@@ -1,0 +1,2315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SunRoots Dubreka Solar Irrigation Pilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #c4a35a;
+      --gold-light: #e2c887;
+      --gold-dark: #9a7b3c;
+      --gold-glow: rgba(196, 163, 90, 0.35);
+      --ink: #0c0c0f;
+      --ink-raised: #12121a;
+      --surface: #18181f;
+      --surface-hover: #1f1f28;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-gold: rgba(196, 163, 90, 0.25);
+      --text: #eceae4;
+      --text-muted: #9c9a94;
+      --text-dim: #6b6963;
+      --ok: #45c66f;
+      --warn: #f2b84b;
+      --danger: #ff5e5e;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--text);
+      line-height: 1.65;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -8%, rgba(196, 163, 90, 0.18) 0%, transparent 56%),
+        var(--ink);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Outfit", system-ui, sans-serif;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: clamp(1.45rem, 3vw, 2.2rem);
+      font-weight: 600;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    .eyebrow {
+      font-family: "Outfit", system-ui, sans-serif;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 1.8rem;
+      height: 1px;
+      background: rgba(196, 163, 90, 0.45);
+    }
+
+    .container {
+      width: min(76rem, 100%);
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      border-bottom: 1px solid var(--border);
+      background: rgba(12, 12, 15, 0.92);
+      backdrop-filter: blur(8px);
+      min-height: 4.25rem;
+    }
+
+    .topbar-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      min-height: 4.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .quick-back-btn {
+      position: absolute;
+      top: 84px;
+      left: 9px;
+      z-index: 60;
+      min-height: 34px;
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.58rem;
+      border: 1px solid var(--border-gold);
+      background: rgba(18, 18, 26, 0.9);
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 220ms var(--ease), border-color 220ms var(--ease), background 220ms var(--ease);
+    }
+
+    .quick-back-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--gold);
+      background: rgba(196, 163, 90, 0.12);
+    }
+
+    .brand {
+      display: grid;
+      gap: 0.2rem;
+    }
+
+    .brand .eyebrow {
+      margin-bottom: 0;
+    }
+
+    .brand-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .hero {
+      position: static;
+      padding: 4rem 0 2rem;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-spotlight {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 300ms var(--ease);
+      background: radial-gradient(
+        580px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+        rgba(196, 163, 90, 0.14) 0%,
+        transparent 62%
+      );
+    }
+
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--gold-light);
+      opacity: 0.22;
+      animation: particleFloat linear infinite;
+    }
+
+    @keyframes particleFloat {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.2;
+      }
+      50% {
+        transform: translate(10px, -26px) scale(1.4);
+        opacity: 0.64;
+      }
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 1.2rem;
+      align-items: start;
+    }
+
+    .hero-head {
+      display: grid;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    #heroEyebrow {
+      position: static;
+      left: auto;
+      top: auto;
+      margin-bottom: 0.75rem;
+    }
+
+    .lead {
+      margin-top: 1rem;
+      max-width: 46rem;
+      font-size: clamp(1rem, 2.1vw, 1.2rem);
+      line-height: 1.7;
+    }
+
+    #heroLead {
+      position: static;
+      left: auto;
+      top: auto;
+      margin-top: 1rem;
+    }
+
+    .hero-actions {
+      margin-top: 1.45rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .countdown-btn {
+      min-width: 13.5rem;
+      min-height: 63px;
+      justify-content: center;
+    }
+
+    .countdown-value {
+      font-family: "Outfit", system-ui, sans-serif;
+      font-size: 1.04rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: 0.8rem 1.4rem;
+      border-radius: 0.76rem;
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: 0.94rem;
+      font-weight: 600;
+      line-height: 1;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition:
+        transform 260ms var(--ease),
+        box-shadow 260ms var(--ease),
+        border-color 260ms var(--ease),
+        background 260ms var(--ease),
+        color 260ms var(--ease),
+        opacity 260ms var(--ease);
+    }
+
+    .btn:focus-visible,
+    input:focus-visible,
+    button:focus-visible {
+      outline: 2px solid rgba(226, 200, 135, 0.85);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      color: #0c0c0f;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 52%, var(--gold-dark) 100%);
+      box-shadow: 0 4px 24px var(--gold-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 28px var(--gold-glow);
+    }
+
+    .btn-secondary {
+      border-color: var(--border-gold);
+      color: var(--gold);
+      background: transparent;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(196, 163, 90, 0.08);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .stats-pill {
+      position: absolute;
+      display: flex;
+      align-items: stretch;
+      width: fit-content;
+      min-width: 16rem;
+      border-radius: 1.12rem;
+      border: 1px solid rgba(196, 163, 90, 0.32);
+      overflow: hidden;
+      background: linear-gradient(145deg, #1f1f28 0%, #12121a 100%);
+      transition: transform 260ms var(--ease), box-shadow 260ms var(--ease), border-color 260ms var(--ease);
+    }
+
+    .hero-top-pill {
+      position: fixed;
+      top: 84px;
+      right: 32px;
+      margin: 0;
+      z-index: 60;
+    }
+
+    .stats-pill:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      box-shadow: 0 4px 24px rgba(196, 163, 90, 0.28);
+    }
+
+    .stats-col {
+      display: grid;
+      gap: 0.25rem;
+      padding: 0.65rem 1.15rem 1rem;
+    }
+
+    .stats-value {
+      font-family: "Outfit", system-ui, sans-serif;
+      color: var(--gold-light);
+      font-size: 1.16rem;
+      font-weight: 700;
+    }
+
+    .stats-label {
+      color: var(--text-muted);
+      font-size: 0.84rem;
+    }
+
+    .stats-divider {
+      width: 1px;
+      background: rgba(196, 163, 90, 0.28);
+    }
+
+    .section {
+      padding: 1.1rem 0 3rem;
+    }
+
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.1rem;
+      padding: 1.1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.38);
+      transition:
+        border-color 260ms var(--ease),
+        transform 260ms var(--ease),
+        box-shadow 260ms var(--ease),
+        background 260ms var(--ease);
+    }
+
+    .section-card:hover {
+      border-color: var(--border-gold);
+      background: var(--surface-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border-gold);
+      border-radius: 999px;
+      padding: 0.26rem 0.65rem;
+      color: var(--gold-light);
+      background: rgba(196, 163, 90, 0.08);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .helper {
+      margin-top: 0.2rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .view-nav {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .view-btn.is-active {
+      border-color: var(--gold);
+      background: rgba(196, 163, 90, 0.14);
+      color: var(--gold-light);
+      box-shadow: 0 4px 20px rgba(196, 163, 90, 0.25);
+    }
+
+    .phase-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+
+    .phase-btn {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 0.48rem 0.9rem 0.48rem 0.52rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      transition:
+        transform 250ms var(--ease),
+        border-color 250ms var(--ease),
+        background 250ms var(--ease),
+        color 250ms var(--ease),
+        box-shadow 250ms var(--ease);
+    }
+
+    .phase-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-gold);
+      color: var(--text);
+    }
+
+    .phase-btn.is-active {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(196, 163, 90, 0.12);
+      box-shadow: 0 4px 22px rgba(196, 163, 90, 0.24);
+    }
+
+    .phase-num {
+      width: 1.62rem;
+      height: 1.62rem;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Outfit", system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(196, 163, 90, 0.08);
+    }
+
+    .phase-btn.is-active .phase-num {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    .grid {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .phase-grid {
+      margin-top: 1rem;
+    }
+
+    .phase-card {
+      border-radius: 1rem;
+      perspective: 1000px;
+      min-height: 11.2rem;
+    }
+
+    .phase-flipper {
+      position: relative;
+      width: 100%;
+      min-height: 11.2rem;
+      transform-style: preserve-3d;
+      transition: transform 650ms cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+
+    .phase-card.is-flipped .phase-flipper {
+      transform: rotateY(180deg);
+    }
+
+    .phase-face {
+      position: relative;
+      width: 100%;
+      min-height: 11.2rem;
+      border-radius: 1rem;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 1px solid var(--border);
+      padding: 1rem;
+      background: linear-gradient(145deg, #1f1f28 0%, #12121a 100%);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
+      transition: border-color 260ms var(--ease), box-shadow 260ms var(--ease), transform 260ms var(--ease);
+    }
+
+    .phase-card:hover .phase-face {
+      border-color: rgba(196, 163, 90, 0.34);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+    }
+
+    .phase-back {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+      background: linear-gradient(145deg, rgba(196, 163, 90, 0.13) 0%, #12121a 46%);
+      border-color: rgba(196, 163, 90, 0.42);
+      overflow: auto;
+    }
+
+    .phase-subtitle {
+      margin-top: 0.55rem;
+      font-size: 0.93rem;
+      color: var(--text-muted);
+    }
+
+    .phase-status {
+      margin-top: 0.8rem;
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 0.24rem 0.62rem;
+      font-size: 0.73rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    .phase-status.current {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(196, 163, 90, 0.12);
+    }
+
+    .phase-detail-list {
+      margin: 0.7rem 0 0;
+      padding-left: 1.05rem;
+      display: grid;
+      gap: 0.38rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .phase-card-btn {
+      margin-top: 0.8rem;
+      min-height: 44px;
+      border-radius: 0.72rem;
+      border: 1px solid var(--border-gold);
+      background: rgba(196, 163, 90, 0.08);
+      color: var(--gold-light);
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 260ms var(--ease), background 260ms var(--ease), border-color 260ms var(--ease);
+    }
+
+    .phase-card-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--gold);
+      background: rgba(196, 163, 90, 0.15);
+    }
+
+    .status-panel {
+      margin-top: 0.9rem;
+      border-radius: 0.9rem;
+      border: 1px solid var(--border);
+      padding: 0.9rem;
+      background: #121219;
+    }
+
+    .status-line {
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: var(--text);
+    }
+
+    .status-safe {
+      color: var(--ok);
+    }
+
+    .status-warn {
+      color: var(--warn);
+    }
+
+    .status-danger {
+      color: var(--danger);
+    }
+
+    .status-detail {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+    }
+
+    .board {
+      border: 1px solid var(--border);
+      border-radius: 0.88rem;
+      background: #111117;
+      padding: 0.8rem;
+      display: grid;
+      gap: 0.42rem;
+    }
+
+    .board-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.34rem;
+    }
+
+    .board-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .board-row strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .execution-grid {
+      margin-top: 0.9rem;
+    }
+
+    .execution-item h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .execution-list {
+      margin: 0;
+      padding-left: 1.03rem;
+      color: var(--text-muted);
+      display: grid;
+      gap: 0.42rem;
+      font-size: 0.92rem;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 0.7rem;
+      margin-top: 0.8rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.3rem;
+    }
+
+    label {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      min-height: 44px;
+      border-radius: 0.72rem;
+      border: 1px solid var(--border);
+      background: #111117;
+      color: var(--text);
+      padding: 0.64rem 0.68rem;
+      font-size: 0.96rem;
+      transition: border-color 260ms var(--ease), box-shadow 260ms var(--ease), background 260ms var(--ease);
+    }
+
+    input[type="number"]:hover {
+      border-color: var(--border-gold);
+      background: #13131b;
+    }
+
+    .formula {
+      font-family: "Cambria Math", "Times New Roman", Georgia, serif;
+      color: var(--gold-light);
+    }
+
+    .formula-block {
+      margin-top: 0.6rem;
+      border: 1px solid var(--border-gold);
+      border-radius: 0.74rem;
+      background: rgba(196, 163, 90, 0.08);
+      padding: 0.7rem 0.8rem;
+    }
+
+    .formula-line {
+      margin: 0.3rem 0;
+      font-family: "Cambria Math", "Times New Roman", Georgia, serif;
+      color: var(--gold-light);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .eng-box {
+      margin-top: 0.8rem;
+      padding: 0.86rem;
+      border-radius: 0.84rem;
+      border: 1px solid var(--border-gold);
+      background: rgba(196, 163, 90, 0.07);
+      display: none;
+    }
+
+    body.engineering-on .eng-box {
+      display: block;
+    }
+
+    .eng-box p {
+      margin: 0.35rem 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .checklist {
+      margin: 0.88rem 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.68rem;
+    }
+
+    .check-item {
+      border: 1px solid var(--border);
+      background: #121219;
+      border-radius: 0.76rem;
+      padding: 0.72rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      transition: border-color 260ms var(--ease), background 260ms var(--ease), transform 260ms var(--ease);
+    }
+
+    .check-item:hover {
+      border-color: var(--border-gold);
+      background: #14141d;
+      transform: translateY(-1px);
+    }
+
+    .check-item input {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-top: 0.1rem;
+      accent-color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .check-item label {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .progress {
+      margin-top: 0.45rem;
+      font-size: 0.9rem;
+    }
+
+    .actions-grid {
+      display: grid;
+      gap: 0.66rem;
+      margin-top: 0.85rem;
+    }
+
+    .history {
+      margin: 0.85rem 0 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.35rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .phase-manager {
+      margin-top: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 0.82rem;
+      background: rgba(18, 18, 26, 0.9);
+      padding: 0.78rem;
+      display: grid;
+      gap: 0.62rem;
+    }
+
+    .phase-manager-grid {
+      display: grid;
+      gap: 0.55rem;
+      grid-template-columns: 1fr;
+    }
+
+    .phase-manager-actions {
+      display: grid;
+      gap: 0.5rem;
+      grid-template-columns: 1fr;
+    }
+
+    .phase-save-btn {
+      min-height: 40px;
+      border-radius: 0.65rem;
+      border: 1px solid var(--border-gold);
+      background: rgba(196, 163, 90, 0.12);
+      color: var(--gold-light);
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: transform 220ms var(--ease), background 220ms var(--ease), border-color 220ms var(--ease);
+    }
+
+    .phase-save-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(196, 163, 90, 0.19);
+      border-color: var(--gold);
+    }
+
+    .phase-back-btn {
+      min-height: 40px;
+      border-radius: 0.65rem;
+      border: 1px solid var(--border);
+      background: #16161f;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: transform 220ms var(--ease), border-color 220ms var(--ease), color 220ms var(--ease), background 220ms var(--ease);
+    }
+
+    .phase-back-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--border-gold);
+      color: var(--text);
+      background: #1b1b24;
+    }
+
+    .phase-update-toggle {
+      margin-top: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 0.82rem;
+      background: rgba(18, 18, 26, 0.9);
+      overflow: hidden;
+    }
+
+    .phase-update-toggle > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.7rem 0.82rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-bottom: 1px solid transparent;
+      transition: background 220ms var(--ease), border-color 220ms var(--ease), color 220ms var(--ease);
+    }
+
+    .phase-update-toggle > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .phase-update-toggle > summary::after {
+      content: "▾";
+      float: right;
+      color: var(--text-dim);
+      transition: transform 220ms var(--ease);
+    }
+
+    .phase-update-toggle[open] > summary {
+      border-bottom-color: rgba(255, 255, 255, 0.11);
+      background: rgba(196, 163, 90, 0.06);
+    }
+
+    .phase-update-toggle[open] > summary::after {
+      transform: rotate(180deg);
+    }
+
+    .phase-update-content {
+      padding: 0.72rem;
+      display: grid;
+      gap: 0.62rem;
+    }
+
+    .phase-manager-note {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+
+    select,
+    input[type="date"] {
+      width: 100%;
+      min-height: 44px;
+      border-radius: 0.72rem;
+      border: 1px solid var(--border);
+      background: #111117;
+      color: var(--text);
+      padding: 0.64rem 0.68rem;
+      font-size: 0.96rem;
+      transition: border-color 260ms var(--ease), box-shadow 260ms var(--ease), background 260ms var(--ease);
+    }
+
+    select:hover,
+    input[type="date"]:hover {
+      border-color: var(--border-gold);
+      background: #13131b;
+    }
+
+    .phase-status.plan {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .phase-status.execution {
+      border-color: rgba(196, 163, 90, 0.45);
+      color: var(--gold-light);
+      background: rgba(196, 163, 90, 0.12);
+    }
+
+    .phase-status.completed {
+      border-color: rgba(69, 198, 111, 0.45);
+      color: var(--ok);
+      background: rgba(69, 198, 111, 0.1);
+    }
+
+    .tiny {
+      margin-top: 0.5rem;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+
+    .tilt-card {
+      transform: perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+      transition: transform 260ms var(--ease);
+      will-change: transform;
+    }
+
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 650ms var(--ease), transform 650ms var(--ease);
+    }
+
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding-inline: 2rem;
+      }
+
+      .field-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .actions-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding-top: 5rem;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .phase-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .execution-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 901px) {
+      .hero-grid {
+        grid-template-columns: 1fr auto;
+        align-items: end;
+      }
+
+      .hero-head {
+        gap: 1.2rem;
+      }
+
+      .phase-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .phase-manager-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .phase-manager-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero {
+        padding-top: 5.6rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="quick-back-btn" id="quickDashboardBtn" type="button" hidden>Back to Dashboard</button>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <p class="eyebrow" id="brandEyebrow">SunRoots Dubreka</p>
+      </div>
+      <label class="btn btn-secondary" for="engineeringMode">
+        <span id="engineeringModeLabel">Engineering Mode</span>
+        <input id="engineeringMode" type="checkbox" aria-label="Enable engineering mode details" style="margin-left:0.5rem;" />
+      </label>
+      <button class="btn btn-secondary" id="languageToggleBtn" type="button">FR</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-bg">
+        <div class="hero-spotlight" id="heroSpotlight"></div>
+        <div class="hero-particles" id="heroParticles"></div>
+      </div>
+      <div class="container hero-grid">
+        <div class="hero-head">
+          <div class="stats-pill hero-top-pill tilt-card reveal-on-scroll">
+            <div class="stats-col">
+              <span class="stats-value">SUNROOT</span>
+              <span class="stats-label" id="statsLabelLeft">Pilot</span>
+            </div>
+            <div class="stats-divider"></div>
+            <div class="stats-col">
+              <span class="stats-value">Dubreka 2026</span>
+              <span class="stats-label" id="statsLabelRight">Solar Irrigation</span>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow" id="heroEyebrow">Solar Irrigation Pilot</p>
+            <h1 id="heroTitle">Dashboard and Execution Control Center</h1>
+            <p class="lead" id="heroLead">
+              Premium, field-ready interface for roadmap tracking, electrical safety validation, and execution monitoring for the Dubreka solar irrigation project.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary view-btn countdown-btn" id="viewDashboardBtn" type="button">
+                <span class="countdown-value" id="nextPhaseCountdownValue">Set due dates</span>
+              </button>
+              <button class="btn btn-secondary view-btn" id="viewExecutionBtn" type="button">Open Execution Phase</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <section id="dashboardView" aria-label="Project dashboard view">
+          <article class="section-card reveal-on-scroll">
+            <div class="card-head">
+              <h2 id="currentPhaseTitle">Current Phase</h2>
+              <span class="meta-badge" id="currentPhaseBadge">Roadmap Focus</span>
+            </div>
+            <p class="helper" id="currentPhaseHelper">Active lifecycle stage and strategic context.</p>
+            <div class="status-panel" id="currentPhasePanel"></div>
+            <div class="phase-nav" id="phaseNav" aria-label="Select roadmap phase"></div>
+          </article>
+
+          <article class="section-card reveal-on-scroll">
+            <div class="card-head">
+              <h2 id="roadmapTitle">Lifecycle Roadmap</h2>
+              <span class="meta-badge" id="roadmapBadge">Design to Maintenance</span>
+            </div>
+            <p class="helper" id="roadmapHelper">Click any card to flip and see deeper execution detail.</p>
+            <div class="grid phase-grid" id="phaseGrid"></div>
+          </article>
+
+          <article class="section-card reveal-on-scroll tilt-card">
+            <div class="card-head">
+              <h2 id="projectContextTitle">Project Context</h2>
+              <span class="meta-badge" id="projectContextBadge">Site and Architecture</span>
+            </div>
+            <div class="board" id="projectContextBoard">
+              <div class="board-row"><strong>Project</strong><span>SunRoots Dubreka Solar Irrigation Pilot</span></div>
+              <div class="board-row"><strong>Location</strong><span>Dubreka, Guinea</span></div>
+              <div class="board-row"><strong>Coordinates</strong><span>9.7898126, -13.4745297</span></div>
+              <div class="board-row"><strong>Energy Strategy</strong><span>Direct drive, no batteries</span></div>
+              <div class="board-row"><strong>Core Chain</strong><span>3 PV → DC breaker → Ennos MPPT → Pump</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="executionView" aria-label="Execution phase view" hidden>
+          <article class="section-card reveal-on-scroll">
+            <div class="card-head">
+              <h2 id="executionGuideTitle">Execution Phase Guide</h2>
+              <span class="meta-badge" id="executionGuideBadge">Electrical and PV Only</span>
+            </div>
+            <p class="helper" id="executionGuideHelper">All critical field instructions mapped to the final report requirements.</p>
+            <div class="phase-manager">
+              <div class="phase-manager-grid">
+                <div class="field">
+                  <label for="execPhaseSelect" id="execPhaseLabel">Phase</label>
+                  <select id="execPhaseSelect"></select>
+                </div>
+                <div class="field">
+                  <label for="execDueDate" id="execDueDateLabel">Due Date</label>
+                  <input id="execDueDate" type="date" />
+                </div>
+                <div class="field">
+                  <label for="execStage" id="execStageLabel">Stage</label>
+                  <select id="execStage">
+                    <option value="plan">Plan</option>
+                    <option value="execution">Execution</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+              </div>
+              <div class="phase-manager-actions">
+                <button class="phase-save-btn" id="execSaveBtn" type="button">Save Update</button>
+              </div>
+              <p class="phase-manager-note" id="trackerNextDueNote">Next phase due date not set yet.</p>
+              <ol class="history" id="phaseActivityHistory"></ol>
+            </div>
+            <div class="grid execution-grid" id="executionGrid"></div>
+          </article>
+
+          <article class="section-card reveal-on-scroll">
+            <div class="card-head">
+              <h2 id="pvCheckerTitle">PV Voc Safety Checker</h2>
+              <span class="meta-badge" id="pvCheckerBadge">Pre-Installation Validation</span>
+            </div>
+            <p class="helper" id="pvCheckerHelper">Verify per-module and series string limits before wiring.</p>
+            <div class="field-grid">
+              <div class="field">
+                <label for="panelWattage" id="panelWattageLabel">Panel Wattage (W)</label>
+                <input id="panelWattage" type="number" step="1" min="0" />
+              </div>
+              <div class="field">
+                <label for="panelVoc" id="panelVocLabel">Panel Voc (V)</label>
+                <input id="panelVoc" type="number" step="0.1" min="0" />
+              </div>
+              <div class="field">
+                <label for="panelVmp" id="panelVmpLabel">Panel Vmp (V)</label>
+                <input id="panelVmp" type="number" step="0.1" min="0" />
+              </div>
+              <div class="field">
+                <label for="panelImp" id="panelImpLabel">Panel Imp (A)</label>
+                <input id="panelImp" type="number" step="0.1" min="0" />
+              </div>
+              <div class="field">
+                <label for="seriesQty" id="seriesQtyLabel">Panels in Series</label>
+                <input id="seriesQty" type="number" step="1" min="1" />
+              </div>
+            </div>
+            <div class="status-panel">
+              <p class="status-line" id="pvStatusLine"></p>
+              <p class="status-detail" id="pvStatusDetail"></p>
+            </div>
+            <div class="eng-box" id="pvEngineering"></div>
+          </article>
+
+          <article class="section-card reveal-on-scroll">
+            <div class="card-head">
+              <h2 id="checklistTitle">Final Installation Checklist</h2>
+              <span class="meta-badge" id="checklistBadge">Commissioning Control</span>
+            </div>
+            <p class="progress" id="checklistProgress"></p>
+            <ul class="checklist" id="checklist"></ul>
+            <div class="eng-box" id="checklistEngineering"></div>
+          </article>
+
+          <article class="section-card reveal-on-scroll">
+            <div class="card-head">
+              <h2 id="maintenanceTitle">Operation and Maintenance Log</h2>
+              <span class="meta-badge" id="maintenanceBadge">Reliability Tracking</span>
+            </div>
+            <p class="helper" id="maintenanceHelper">Log recurring actions to maintain system performance all year.</p>
+            <div class="actions-grid" id="maintenanceActions"></div>
+            <div class="board" id="maintenanceBoard"></div>
+            <ol class="history" id="maintenanceHistory"></ol>
+            <div class="eng-box" id="maintenanceEngineering"></div>
+            <p class="tiny" id="maintenanceTiny">Use Innovex REMOT / Ennos App regularly, especially during dry season.</p>
+          </article>
+
+          <article class="section-card reveal-on-scroll">
+            <div class="card-head">
+              <h2 id="fieldGuideTitle">Practical Field Guide</h2>
+              <span class="meta-badge" id="fieldGuideBadge">Print and Use On Site</span>
+            </div>
+            <p class="helper" id="fieldGuideHelper">Use this concise guide during installation, commissioning, and tool updates.</p>
+            <ul class="execution-list" id="fieldGuideList">
+              <li>Verify Voc limits, orientation, and shading before any wiring.</li>
+              <li>Confirm breaker, MC4 cleanliness, and polarity before startup.</li>
+              <li>Update phase tracker and maintenance logs after each field task.</li>
+            </ul>
+            <div class="hero-actions">
+              <a class="btn btn-secondary" id="openReportLink" href="final-report.html">Print Guide</a>
+            </div>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const STORAGE_KEY = "sunroots_midnight_champagne_v1";
+      const currentPhaseId = 4;
+      const MAX_VOC = 160;
+      const MAX_PANEL_VOC = 53;
+      const OPTIMAL_WARN = 150;
+      const MPPT_MIN = 57;
+      const MPPT_MAX = 128;
+      const MAX_INPUT_CURRENT = 17.2;
+
+      const roadmapPhases = [
+        {
+          id: 1,
+          name: "Design and Site Assessment",
+          summary: "Survey water source, elevation, and shade-free array zone.",
+          details: [
+            "Confirm permanent source and pumping head profile.",
+            "Check vegetation and obstacle shading risks.",
+            "Prepare installation layout and safety path."
+          ]
+        },
+        {
+          id: 2,
+          name: "Procurement and Electrical Validation",
+          summary: "Select compliant PV modules and protection devices.",
+          details: [
+            "Use three identical panels rated 500-600W.",
+            "Ensure each panel Voc stays below 53V.",
+            "Confirm breaker availability in 18-35A range."
+          ]
+        },
+        {
+          id: 3,
+          name: "Installation Planning",
+          summary: "Define wiring path, breaker enclosure, and contractor sequence.",
+          details: [
+            "Plan series string routing and polarity checks.",
+            "Place breaker near array in weather-protected box.",
+            "Control cable run near high-voltage scenarios."
+          ]
+        },
+        {
+          id: 4,
+          name: "Electrical Installation and Commissioning",
+          summary: "Wire, protect, and verify under sunlight operation.",
+          details: [
+            "Connect Panel1+ to Panel2-, Panel2+ to Panel3-.",
+            "Route free leads through DC breaker to controller.",
+            "Test pump startup and monitoring indicators."
+          ]
+        },
+        {
+          id: 5,
+          name: "Operation and Monitoring",
+          summary: "Track performance with LED display and Bluetooth app.",
+          details: [
+            "Review controller status and solar input behavior.",
+            "Observe pumping trend through daylight windows.",
+            "Capture faults quickly for corrective action."
+          ]
+        },
+        {
+          id: 6,
+          name: "Maintenance and Reliability",
+          summary: "Keep output stable with preventive upkeep.",
+          details: [
+            "Clean modules and connectors regularly.",
+            "Trim vegetation to eliminate new shading.",
+            "Maintain logs for long-term reliability."
+          ]
+        }
+      ];
+
+      const executionSections = [
+        {
+          title: "System Overview",
+          points: [
+            "Three solar PV modules (500-600W each).",
+            "One mandatory 18-35A DC breaker between array and controller.",
+            "Ennos 1.5 HP (1.1kW) DC sunlight pump with integrated MPPT.",
+            "Direct-drive architecture with no batteries."
+          ]
+        },
+        {
+          title: "Panel Selection and Voltage Limits",
+          points: [
+            "Controller open-circuit voltage ceiling is 160V.",
+            "Each module Voc must remain below 53V in 3-panel series.",
+            "Total series Voc should stay below 160V under all conditions.",
+            "Target near the limit only when still compliant and controlled."
+          ]
+        },
+        {
+          title: "Orientation, Tilt, and Shading",
+          points: [
+            "Panels must face strictly South.",
+            "Set fixed tilt to 10 degrees in Dubreka.",
+            "Remove or avoid all shading sources including vegetation and poles."
+          ]
+        },
+        {
+          title: "Wiring and Protection",
+          points: [
+            "Series order: P1(+) to P2(-), P2(+) to P3(-).",
+            "Remaining free positive and negative feed breaker then controller.",
+            "Install breaker close to array and inside weather-protected enclosure.",
+            "When string voltage is 150-160V, keep cable distance <=15 meters."
+          ]
+        },
+        {
+          title: "MC4, Operation, and Monitoring",
+          points: [
+            "Keep MC4 connectors clean, dry, and off wet or dusty ground.",
+            "Clean modules using soft wet cloth or sponge and clean water only.",
+            "Use Innovex REMOT / Ennos app for operating status and fault checks."
+          ]
+        },
+        {
+          title: "Safety Golden Rules",
+          points: [
+            "Never exceed 160V total series Voc.",
+            "Always keep South orientation with 10 degree tilt.",
+            "Never bypass or remove the DC breaker.",
+            "Never connect dirty or wet MC4 connectors."
+          ]
+        }
+      ];
+
+      const checklistItems = [
+        { id: "panelCount", label: "Three identical 500-600W solar panels installed." },
+        { id: "panelVoc", label: "Each panel Voc is below 53V." },
+        { id: "seriesVoc", label: "Total series Voc is below 160V." },
+        { id: "seriesConnection", label: "Panels connected in correct series sequence." },
+        { id: "breakerInstall", label: "18-35A DC breaker installed near the solar array." },
+        { id: "cableLength", label: "Cable length stays below 15m when operating near 150-160V." },
+        { id: "orientation", label: "Panels face South." },
+        { id: "tilt", label: "Panel tilt fixed at 10 degrees." },
+        { id: "shading", label: "No shading present on PV modules." },
+        { id: "mc4", label: "MC4 connectors are clean, dry, and fully locked." },
+        { id: "monitoring", label: "LED display and Bluetooth monitoring are verified." },
+        { id: "pumpTest", label: "System tested under sunlight and pump operation confirmed." }
+      ];
+
+      const maintenanceActions = {
+        moduleCleaning: "Log Module Cleaning",
+        vegetationControl: "Log Vegetation Trimming",
+        mc4Inspection: "Log MC4 Inspection",
+        breakerCheck: "Log Breaker Check",
+        appReview: "Log App Monitoring Review"
+      };
+
+      const FR_MAP = {
+        "Back to Dashboard": "Retour au tableau de bord",
+        "Engineering Mode": "Mode ingenierie",
+        "Solar Irrigation Pilot": "Projet pilote d'irrigation solaire",
+        "Dashboard and Execution Control Center": "Tableau de bord et centre de pilotage de l'execution",
+        "Premium, field-ready interface for roadmap tracking, electrical safety validation, and execution monitoring for the Dubreka solar irrigation project.": "Interface terrain premium pour le suivi de la feuille de route, la validation de la securite electrique et le suivi de l'execution du projet d'irrigation solaire de Dubreka.",
+        "Open Execution Phase": "Ouvrir la phase d'execution",
+        "Open Final Report Document": "Ouvrir le rapport final",
+        "Print Guide": "Imprimer le guide",
+        "Current Phase": "Phase actuelle",
+        "Roadmap Focus": "Priorite feuille de route",
+        "Active lifecycle stage and strategic context.": "Etape active du cycle de vie et contexte strategique.",
+        "Lifecycle Roadmap": "Feuille de route du cycle de vie",
+        "Design to Maintenance": "De la conception a la maintenance",
+        "Click any card to flip and see deeper execution detail.": "Cliquez sur une carte pour la retourner et voir plus de details d'execution.",
+        "Project Context": "Contexte du projet",
+        "Site and Architecture": "Site et architecture",
+        "Project": "Projet",
+        "Location": "Lieu",
+        "Coordinates": "Coordonnees",
+        "Energy Strategy": "Strategie energetique",
+        "Direct drive, no batteries": "Entrainement direct, sans batteries",
+        "Core Chain": "Chaine principale",
+        "Execution Phase Guide": "Guide de phase d'execution",
+        "Electrical and PV Only": "Electrique et PV uniquement",
+        "All critical field instructions mapped to the final report requirements.": "Toutes les instructions critiques terrain sont alignees sur les exigences du rapport final.",
+        "Phase": "Phase",
+        "Due Date": "Date d'echeance",
+        "Stage": "Statut",
+        "Plan": "Planification",
+        "Execution": "Execution",
+        "Completed": "Terminee",
+        "Save Update": "Enregistrer la mise a jour",
+        "Next phase due date not set yet.": "La date d'echeance de la prochaine phase n'est pas encore definie.",
+        "PV Voc Safety Checker": "Verificateur de securite Voc PV",
+        "Pre-Installation Validation": "Validation pre-installation",
+        "Verify per-module and series string limits before wiring.": "Verifiez les limites par module et par chaine serie avant le cablage.",
+        "Panel Wattage (W)": "Puissance panneau (W)",
+        "Panel Voc (V)": "Voc panneau (V)",
+        "Panel Vmp (V)": "Vmp panneau (V)",
+        "Panel Imp (A)": "Imp panneau (A)",
+        "Panels in Series": "Panneaux en serie",
+        "Final Installation Checklist": "Checklist finale d'installation",
+        "Commissioning Control": "Controle de mise en service",
+        "Operation and Maintenance Log": "Journal d'exploitation et maintenance",
+        "Reliability Tracking": "Suivi de fiabilite",
+        "Log recurring actions to maintain system performance all year.": "Journalisez les actions recurrentes pour maintenir les performances toute l'annee.",
+        "Use Innovex REMOT / Ennos App regularly, especially during dry season.": "Utilisez regulierement Innovex REMOT / Ennos App, surtout en saison seche.",
+        "Practical Field Guide": "Guide pratique terrain",
+        "Print and Use On Site": "Imprimer et utiliser sur site",
+        "Use this concise guide during installation, commissioning, and tool updates.": "Utilisez ce guide concis pendant l'installation, la mise en service et les mises a jour des outils.",
+        "Verify Voc limits, orientation, and shading before any wiring.": "Verifier les limites de Voc, l'orientation et l'ombrage avant tout cablage.",
+        "Confirm breaker, MC4 cleanliness, and polarity before startup.": "Confirmer le disjoncteur, la proprete des MC4 et la polarite avant demarrage.",
+        "Update phase tracker and maintenance logs after each field task.": "Mettre a jour le suivi des phases et les journaux de maintenance apres chaque tache terrain.",
+        "Pilot": "Pilote",
+        "Solar Irrigation": "Irrigation solaire",
+        "Set due dates": "Definir les echeances",
+        "Design and Site Assessment": "Conception et etude du site",
+        "Survey water source, elevation, and shade-free array zone.": "Relever la source d'eau, l'elevation et la zone de panneaux sans ombrage.",
+        "Confirm permanent source and pumping head profile.": "Confirmer la source permanente et le profil de hauteur de pompage.",
+        "Check vegetation and obstacle shading risks.": "Verifier les risques d'ombrage lies a la vegetation et aux obstacles.",
+        "Prepare installation layout and safety path.": "Preparer le plan d'installation et le parcours securise.",
+        "Procurement and Electrical Validation": "Approvisionnement et validation electrique",
+        "Select compliant PV modules and protection devices.": "Selectionner des modules PV conformes et les protections adaptees.",
+        "Use three identical panels rated 500-600W.": "Utiliser trois panneaux identiques de 500 a 600 W.",
+        "Ensure each panel Voc stays below 53V.": "Verifier que la Voc de chaque panneau reste sous 53 V.",
+        "Confirm breaker availability in 18-35A range.": "Confirmer la disponibilite d'un disjoncteur de 18 a 35 A.",
+        "Installation Planning": "Planification de l'installation",
+        "Define wiring path, breaker enclosure, and contractor sequence.": "Definir le cheminement du cablage, le coffret du disjoncteur et la sequence d'intervention.",
+        "Plan series string routing and polarity checks.": "Planifier le routage de la chaine serie et les controles de polarite.",
+        "Place breaker near array in weather-protected box.": "Placer le disjoncteur pres du champ PV dans un boitier protege des intemperies.",
+        "Control cable run near high-voltage scenarios.": "Maitriser la longueur des cables dans les scenarios de tension elevee.",
+        "Electrical Installation and Commissioning": "Installation electrique et mise en service",
+        "Wire, protect, and verify under sunlight operation.": "Cabler, proteger et verifier en condition d'ensoleillement.",
+        "Connect Panel1+ to Panel2-, Panel2+ to Panel3-.": "Connecter Panneau1+ a Panneau2-, puis Panneau2+ a Panneau3-.",
+        "Route free leads through DC breaker to controller.": "Faire passer les conducteurs libres par le disjoncteur DC vers le controleur.",
+        "Test pump startup and monitoring indicators.": "Tester le demarrage de la pompe et les indicateurs de supervision.",
+        "Operation and Monitoring": "Exploitation et suivi",
+        "Track performance with LED display and Bluetooth app.": "Suivre les performances via l'affichage LED et l'application Bluetooth.",
+        "Review controller status and solar input behavior.": "Verifier l'etat du controleur et le comportement de l'entree solaire.",
+        "Observe pumping trend through daylight windows.": "Observer la tendance de pompage pendant les heures utiles d'ensoleillement.",
+        "Capture faults quickly for corrective action.": "Identifier rapidement les defauts pour corriger.",
+        "Maintenance and Reliability": "Maintenance et fiabilite",
+        "Keep output stable with preventive upkeep.": "Maintenir une production stable par maintenance preventive.",
+        "Clean modules and connectors regularly.": "Nettoyer regulierement les modules et les connecteurs.",
+        "Trim vegetation to eliminate new shading.": "Tailler la vegetation pour eliminer tout nouvel ombrage.",
+        "Maintain logs for long-term reliability.": "Tenir des journaux pour la fiabilite long terme.",
+        "System Overview": "Vue d'ensemble du systeme",
+        "Three solar PV modules (500-600W each).": "Trois modules PV solaires (500 a 600 W chacun).",
+        "One mandatory 18-35A DC breaker between array and controller.": "Un disjoncteur DC 18 a 35 A obligatoire entre le champ PV et le controleur.",
+        "Ennos 1.5 HP (1.1kW) DC sunlight pump with integrated MPPT.": "Pompe solaire DC Ennos 1,5 HP (1,1 kW) avec MPPT integre.",
+        "Direct-drive architecture with no batteries.": "Architecture a entrainement direct sans batteries.",
+        "Panel Selection and Voltage Limits": "Choix des panneaux et limites de tension",
+        "Controller open-circuit voltage ceiling is 160V.": "La tension a vide maximale du controleur est de 160 V.",
+        "Each module Voc must remain below 53V in 3-panel series.": "La Voc de chaque module doit rester sous 53 V en serie de 3 panneaux.",
+        "Total series Voc should stay below 160V under all conditions.": "La Voc totale en serie doit rester sous 160 V dans toutes les conditions.",
+        "Target near the limit only when still compliant and controlled.": "Viser la limite uniquement si la conformite et le controle sont assures.",
+        "Orientation, Tilt, and Shading": "Orientation, inclinaison et ombrage",
+        "Panels must face strictly South.": "Les panneaux doivent etre orientes strictement au sud.",
+        "Set fixed tilt to 10 degrees in Dubreka.": "Regler l'inclinaison fixe a 10 degres a Dubreka.",
+        "Remove or avoid all shading sources including vegetation and poles.": "Supprimer ou eviter toute source d'ombrage, y compris vegetation et poteaux.",
+        "Wiring and Protection": "Cablage et protection",
+        "Series order: P1(+) to P2(-), P2(+) to P3(-).": "Ordre en serie: P1(+) vers P2(-), puis P2(+) vers P3(-).",
+        "Remaining free positive and negative feed breaker then controller.": "Les bornes positive et negative libres vont au disjoncteur puis au controleur.",
+        "Install breaker close to array and inside weather-protected enclosure.": "Installer le disjoncteur pres du champ PV et dans un boitier protege.",
+        "When string voltage is 150-160V, keep cable distance <=15 meters.": "Quand la tension de chaine est de 150 a 160 V, garder une distance de cable <= 15 m.",
+        "MC4, Operation, and Monitoring": "MC4, exploitation et supervision",
+        "Keep MC4 connectors clean, dry, and off wet or dusty ground.": "Maintenir les connecteurs MC4 propres, secs et hors sol humide ou poussiereux.",
+        "Clean modules using soft wet cloth or sponge and clean water only.": "Nettoyer les modules avec un chiffon/une eponge douce humide et de l'eau propre uniquement.",
+        "Use Innovex REMOT / Ennos app for operating status and fault checks.": "Utiliser l'app Innovex REMOT / Ennos pour l'etat de fonctionnement et les defauts.",
+        "Safety Golden Rules": "Regles d'or de securite",
+        "Never exceed 160V total series Voc.": "Ne jamais depasser 160 V de Voc totale en serie.",
+        "Always keep South orientation with 10 degree tilt.": "Toujours garder une orientation sud avec inclinaison de 10 degres.",
+        "Never bypass or remove the DC breaker.": "Ne jamais contourner ni retirer le disjoncteur DC.",
+        "Never connect dirty or wet MC4 connectors.": "Ne jamais connecter des MC4 sales ou humides.",
+        "Log Module Cleaning": "Journaliser le nettoyage des modules",
+        "Log Vegetation Trimming": "Journaliser la taille de vegetation",
+        "Log MC4 Inspection": "Journaliser l'inspection MC4",
+        "Log Breaker Check": "Journaliser le controle du disjoncteur",
+        "Log App Monitoring Review": "Journaliser le suivi applicatif"
+      };
+
+      function getDefaultPhaseStatuses() {
+        return roadmapPhases.reduce((acc, phase) => {
+          if (phase.id < currentPhaseId) acc[phase.id] = "completed";
+          else if (phase.id === currentPhaseId) acc[phase.id] = "execution";
+          else acc[phase.id] = "plan";
+          return acc;
+        }, {});
+      }
+
+      const defaultState = {
+        activeView: "dashboard",
+        activePhase: currentPhaseId,
+        language: "en",
+        engineeringMode: false,
+        phaseDueDates: {},
+        phaseStatuses: getDefaultPhaseStatuses(),
+        phaseActivityHistory: [],
+        pv: {
+          panelWattage: "",
+          panelVoc: "",
+          panelVmp: "",
+          panelImp: "",
+          seriesQty: 3
+        },
+        checklist: checklistItems.reduce((acc, item) => {
+          acc[item.id] = false;
+          return acc;
+        }, {}),
+        maintenance: {
+          lastActions: Object.keys(maintenanceActions).reduce((acc, key) => {
+            acc[key] = null;
+            return acc;
+          }, {}),
+          history: []
+        }
+      };
+
+      let state = deepMerge(defaultState, loadState());
+
+      const dashboardView = document.getElementById("dashboardView");
+      const executionView = document.getElementById("executionView");
+      const viewDashboardBtn = document.getElementById("viewDashboardBtn");
+      const viewExecutionBtn = document.getElementById("viewExecutionBtn");
+      const quickDashboardBtn = document.getElementById("quickDashboardBtn");
+      const engineeringMode = document.getElementById("engineeringMode");
+      const engineeringModeWrap = engineeringMode.closest("label");
+      const languageToggleBtn = document.getElementById("languageToggleBtn");
+      const nextPhaseCountdownValue = document.getElementById("nextPhaseCountdownValue");
+      const execPhaseSelect = document.getElementById("execPhaseSelect");
+      const execDueDate = document.getElementById("execDueDate");
+      const execStage = document.getElementById("execStage");
+      const execSaveBtn = document.getElementById("execSaveBtn");
+      const trackerNextDueNote = document.getElementById("trackerNextDueNote");
+      const phaseActivityHistory = document.getElementById("phaseActivityHistory");
+
+      const pvInputs = {
+        panelWattage: document.getElementById("panelWattage"),
+        panelVoc: document.getElementById("panelVoc"),
+        panelVmp: document.getElementById("panelVmp"),
+        panelImp: document.getElementById("panelImp"),
+        seriesQty: document.getElementById("seriesQty")
+      };
+
+      function isFrench() {
+        return state.language === "fr";
+      }
+
+      function tt(text) {
+        if (!isFrench()) return text;
+        return FR_MAP[text] || text;
+      }
+
+      function stageLabel(stage) {
+        const labels = {
+          plan: isFrench() ? "Planification" : "Plan",
+          execution: isFrench() ? "Execution" : "Execution",
+          completed: isFrench() ? "Terminee" : "Completed"
+        };
+        return labels[stage] || stage;
+      }
+
+      function applyStaticTranslations() {
+        document.documentElement.lang = isFrench() ? "fr" : "en";
+        languageToggleBtn.textContent = isFrench() ? "EN" : "FR";
+        quickDashboardBtn.textContent = tt("Back to Dashboard");
+        document.getElementById("engineeringModeLabel").textContent = tt("Engineering Mode");
+        document.getElementById("heroEyebrow").textContent = tt("Solar Irrigation Pilot");
+        document.getElementById("statsLabelLeft").textContent = tt("Pilot");
+        document.getElementById("statsLabelRight").textContent = tt("Solar Irrigation");
+        document.getElementById("heroTitle").textContent = tt("Dashboard and Execution Control Center");
+        document.getElementById("heroLead").textContent = tt("Premium, field-ready interface for roadmap tracking, electrical safety validation, and execution monitoring for the Dubreka solar irrigation project.");
+        viewExecutionBtn.textContent = tt("Open Execution Phase");
+        document.getElementById("openReportLink").textContent = tt("Print Guide");
+        document.getElementById("currentPhaseTitle").textContent = tt("Current Phase");
+        document.getElementById("currentPhaseBadge").textContent = tt("Roadmap Focus");
+        document.getElementById("currentPhaseHelper").textContent = tt("Active lifecycle stage and strategic context.");
+        document.getElementById("roadmapTitle").textContent = tt("Lifecycle Roadmap");
+        document.getElementById("roadmapBadge").textContent = tt("Design to Maintenance");
+        document.getElementById("roadmapHelper").textContent = tt("Click any card to flip and see deeper execution detail.");
+        document.getElementById("projectContextTitle").textContent = tt("Project Context");
+        document.getElementById("projectContextBadge").textContent = tt("Site and Architecture");
+        document.getElementById("executionGuideTitle").textContent = tt("Execution Phase Guide");
+        document.getElementById("executionGuideBadge").textContent = tt("Electrical and PV Only");
+        document.getElementById("executionGuideHelper").textContent = tt("All critical field instructions mapped to the final report requirements.");
+        document.getElementById("execPhaseLabel").textContent = tt("Phase");
+        document.getElementById("execDueDateLabel").textContent = tt("Due Date");
+        document.getElementById("execStageLabel").textContent = tt("Stage");
+        document.getElementById("execSaveBtn").textContent = tt("Save Update");
+        document.getElementById("pvCheckerTitle").textContent = tt("PV Voc Safety Checker");
+        document.getElementById("pvCheckerBadge").textContent = tt("Pre-Installation Validation");
+        document.getElementById("pvCheckerHelper").textContent = tt("Verify per-module and series string limits before wiring.");
+        document.getElementById("panelWattageLabel").textContent = tt("Panel Wattage (W)");
+        document.getElementById("panelVocLabel").textContent = tt("Panel Voc (V)");
+        document.getElementById("panelVmpLabel").textContent = tt("Panel Vmp (V)");
+        document.getElementById("panelImpLabel").textContent = tt("Panel Imp (A)");
+        document.getElementById("seriesQtyLabel").textContent = tt("Panels in Series");
+        document.getElementById("checklistTitle").textContent = tt("Final Installation Checklist");
+        document.getElementById("checklistBadge").textContent = tt("Commissioning Control");
+        document.getElementById("maintenanceTitle").textContent = tt("Operation and Maintenance Log");
+        document.getElementById("maintenanceBadge").textContent = tt("Reliability Tracking");
+        document.getElementById("maintenanceHelper").textContent = tt("Log recurring actions to maintain system performance all year.");
+        document.getElementById("maintenanceTiny").textContent = tt("Use Innovex REMOT / Ennos App regularly, especially during dry season.");
+        document.getElementById("fieldGuideTitle").textContent = tt("Practical Field Guide");
+        document.getElementById("fieldGuideBadge").textContent = tt("Print and Use On Site");
+        document.getElementById("fieldGuideHelper").textContent = tt("Use this concise guide during installation, commissioning, and tool updates.");
+        document.getElementById("fieldGuideList").innerHTML = `
+          <li>${tt("Verify Voc limits, orientation, and shading before any wiring.")}</li>
+          <li>${tt("Confirm breaker, MC4 cleanliness, and polarity before startup.")}</li>
+          <li>${tt("Update phase tracker and maintenance logs after each field task.")}</li>
+        `;
+        const stageOptions = execStage.querySelectorAll("option");
+        if (stageOptions[0]) stageOptions[0].textContent = tt("Plan");
+        if (stageOptions[1]) stageOptions[1].textContent = tt("Execution");
+        if (stageOptions[2]) stageOptions[2].textContent = tt("Completed");
+        document.getElementById("projectContextBoard").innerHTML = `
+          <div class="board-row"><strong>${tt("Project")}</strong><span>SunRoots Dubreka Solar Irrigation Pilot</span></div>
+          <div class="board-row"><strong>${tt("Location")}</strong><span>Dubreka, Guinea</span></div>
+          <div class="board-row"><strong>${tt("Coordinates")}</strong><span>9.7898126, -13.4745297</span></div>
+          <div class="board-row"><strong>${tt("Energy Strategy")}</strong><span>${tt("Direct drive, no batteries")}</span></div>
+          <div class="board-row"><strong>${tt("Core Chain")}</strong><span>3 PV → DC breaker → Ennos MPPT → Pump</span></div>
+        `;
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (_error) {
+          return {};
+        }
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function deepMerge(base, incoming) {
+        if (!incoming || typeof incoming !== "object") return structuredClone(base);
+        const output = structuredClone(base);
+        Object.keys(incoming).forEach((key) => {
+          const incomingValue = incoming[key];
+          if (
+            incomingValue &&
+            typeof incomingValue === "object" &&
+            !Array.isArray(incomingValue) &&
+            output[key] &&
+            typeof output[key] === "object" &&
+            !Array.isArray(output[key])
+          ) {
+            output[key] = deepMerge(output[key], incomingValue);
+          } else {
+            output[key] = incomingValue;
+          }
+        });
+        return output;
+      }
+
+      function parseNumber(value) {
+        if (value === "" || value === null || value === undefined) return null;
+        const n = Number(value);
+        return Number.isFinite(n) ? n : null;
+      }
+
+      function prefersReducedMotion() {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      }
+
+      function setView(view) {
+        state.activeView = view;
+        saveState();
+        renderViews();
+      }
+
+      function setActivePhase(phaseId) {
+        state.activePhase = phaseId;
+        saveState();
+        renderCurrentPhase();
+        renderPhaseNav();
+        renderPhaseCards();
+        renderCountdown();
+      }
+
+      function renderViews() {
+        const isDashboard = state.activeView !== "execution";
+        dashboardView.hidden = !isDashboard;
+        executionView.hidden = isDashboard;
+
+        viewDashboardBtn.classList.toggle("is-active", isDashboard);
+        viewExecutionBtn.classList.toggle("is-active", !isDashboard);
+        quickDashboardBtn.hidden = isDashboard;
+        if (engineeringModeWrap) {
+          engineeringModeWrap.hidden = isDashboard;
+        }
+      }
+
+      function renderCurrentPhase() {
+        const phase = roadmapPhases.find((item) => item.id === state.activePhase) || roadmapPhases[0];
+        const panel = document.getElementById("currentPhasePanel");
+        const stage = state.phaseStatuses[phase.id] || "plan";
+        const due = state.phaseDueDates[phase.id];
+        const dueText = due ? ` · ${isFrench() ? "Echeance" : "Due"} ${new Date(`${due}T00:00:00`).toLocaleDateString()}` : "";
+        panel.innerHTML = `
+          <p class="status-line status-safe">Phase ${phase.id}: ${tt(phase.name)}</p>
+          <p class="status-detail">${tt(phase.summary)}</p>
+          <p class="tiny">${isFrench() ? "Statut" : "Stage"}: ${stageLabel(stage)}${dueText}</p>
+        `;
+      }
+
+      function renderPhaseNav() {
+        const nav = document.getElementById("phaseNav");
+        nav.innerHTML = "";
+
+        roadmapPhases.forEach((phase) => {
+          const btn = document.createElement("button");
+          btn.className = "phase-btn";
+          btn.type = "button";
+          btn.dataset.phase = String(phase.id);
+          btn.setAttribute("aria-label", `${isFrench() ? "Definir la phase actuelle sur" : "Set current phase to"} ${tt(phase.name)}`);
+          btn.classList.toggle("is-active", phase.id === state.activePhase);
+          btn.innerHTML = `<span class="phase-num">${phase.id}</span><span>Phase ${phase.id}</span>`;
+          btn.addEventListener("click", () => setActivePhase(phase.id));
+          nav.appendChild(btn);
+        });
+      }
+
+      function renderPhaseCards() {
+        const phaseGrid = document.getElementById("phaseGrid");
+        phaseGrid.innerHTML = "";
+
+        roadmapPhases.forEach((phase) => {
+          const card = document.createElement("article");
+          card.className = "phase-card tilt-card";
+          card.tabIndex = 0;
+          card.dataset.phase = String(phase.id);
+          card.setAttribute("aria-label", `Phase ${phase.id} ${tt(phase.name)}`);
+
+          const details = phase.details.map((point) => `<li>${tt(point)}</li>`).join("");
+          const stage = state.phaseStatuses[phase.id] || "plan";
+          const stageText = stageLabel(stage);
+          const statusClass = phase.id === state.activePhase ? `phase-status ${stage} current` : `phase-status ${stage}`;
+          const statusText = phase.id === state.activePhase ? `${stageText} · ${isFrench() ? "Actuelle" : "Current"}` : stageText;
+          const due = state.phaseDueDates[phase.id] ? `<p class="tiny">${isFrench() ? "Echeance" : "Due"}: ${new Date(`${state.phaseDueDates[phase.id]}T00:00:00`).toLocaleDateString()}</p>` : "";
+
+          card.innerHTML = `
+            <div class="phase-flipper">
+              <div class="phase-face phase-front">
+                <span class="meta-badge">Phase ${phase.id}</span>
+                <h3 style="margin-top: 0.7rem;">${tt(phase.name)}</h3>
+                <p class="phase-subtitle">${tt(phase.summary)}</p>
+                <span class="${statusClass}">${statusText}</span>
+                ${due}
+                <button class="phase-card-btn" type="button">${isFrench() ? "Voir details" : "View Details"}</button>
+              </div>
+              <div class="phase-face phase-back">
+                <span class="meta-badge">${isFrench() ? "Notes d'execution" : "Execution Notes"}</span>
+                <h3 style="margin-top: 0.7rem;">${tt(phase.name)}</h3>
+                <ul class="phase-detail-list">${details}</ul>
+                <details class="phase-update-toggle">
+                  <summary>${isFrench() ? "Mise a jour" : "Update"}</summary>
+                  <div class="phase-update-content">
+                    <div class="phase-manager-grid">
+                      <div class="field">
+                        <label for="phase-due-${phase.id}">${tt("Due Date")}</label>
+                        <input id="phase-due-${phase.id}" type="date" value="${state.phaseDueDates[phase.id] || ""}" />
+                      </div>
+                      <div class="field">
+                        <label for="phase-stage-${phase.id}">${tt("Stage")}</label>
+                        <select id="phase-stage-${phase.id}">
+                          <option value="plan" ${stage === "plan" ? "selected" : ""}>${tt("Plan")}</option>
+                          <option value="execution" ${stage === "execution" ? "selected" : ""}>${tt("Execution")}</option>
+                          <option value="completed" ${stage === "completed" ? "selected" : ""}>${tt("Completed")}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="phase-manager-actions">
+                      <button class="phase-save-btn" data-action="save-phase" data-phase="${phase.id}" type="button">${tt("Save Update")}</button>
+                    </div>
+                  </div>
+                </details>
+                <button class="phase-back-btn phase-card-btn" type="button">${isFrench() ? "Retour" : "Back"}</button>
+              </div>
+            </div>
+          `;
+
+          card.addEventListener("click", (event) => {
+            if (!(event.target instanceof HTMLElement)) return;
+            if (event.target.dataset.action === "save-phase") {
+              const phaseId = Number(event.target.dataset.phase);
+              const dueInput = card.querySelector(`#phase-due-${phaseId}`);
+              const stageSelect = card.querySelector(`#phase-stage-${phaseId}`);
+              if (dueInput instanceof HTMLInputElement && stageSelect instanceof HTMLSelectElement) {
+                savePhaseUpdate(phaseId, dueInput.value || "", stageSelect.value);
+              }
+              return;
+            }
+            if (event.target.classList.contains("phase-card-btn")) {
+              card.classList.toggle("is-flipped");
+            }
+          });
+
+          card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              card.classList.toggle("is-flipped");
+            }
+            if (event.key === "Escape") {
+              card.classList.remove("is-flipped");
+            }
+          });
+
+          phaseGrid.appendChild(card);
+        });
+      }
+
+      function renderExecutionSections() {
+        const executionGrid = document.getElementById("executionGrid");
+        executionGrid.innerHTML = "";
+
+        executionSections.forEach((section) => {
+          const card = document.createElement("article");
+          card.className = "section-card execution-item tilt-card";
+          const points = section.points.map((point) => `<li>${tt(point)}</li>`).join("");
+          card.innerHTML = `
+            <h3>${tt(section.title)}</h3>
+            <ul class="execution-list">${points}</ul>
+          `;
+          executionGrid.appendChild(card);
+        });
+      }
+
+      function renderPV() {
+        Object.keys(pvInputs).forEach((key) => {
+          pvInputs[key].value = state.pv[key];
+        });
+
+        const panelVoc = parseNumber(state.pv.panelVoc);
+        const panelVmp = parseNumber(state.pv.panelVmp);
+        const panelImp = parseNumber(state.pv.panelImp);
+        const seriesQty = parseNumber(state.pv.seriesQty) || 0;
+        const totalVoc = panelVoc !== null ? panelVoc * seriesQty : null;
+        const totalVmp = panelVmp !== null ? panelVmp * seriesQty : null;
+
+        const line = document.getElementById("pvStatusLine");
+        const detail = document.getElementById("pvStatusDetail");
+        line.className = "status-line";
+
+        if (panelVoc === null || seriesQty <= 0 || totalVoc === null) {
+          line.classList.add("status-warn");
+          line.textContent = isFrench() ? "Saisissez Voc et le nombre de panneaux pour evaluer la securite." : "Enter Voc and panel count to evaluate safety.";
+          detail.textContent = isFrench() ? "Requis: Voc de chaque panneau < 53V, Voc totale en serie < 160V." : "Required: each panel Voc below 53V, total series Voc below 160V.";
+        } else if (panelVoc >= MAX_PANEL_VOC || totalVoc > MAX_VOC) {
+          line.classList.add("status-danger");
+          line.textContent = isFrench() ? "Configuration Voc non conforme." : "Non-compliant Voc configuration.";
+          detail.textContent = isFrench() ? `Voc panneau ${panelVoc.toFixed(1)}V, Voc serie ${totalVoc.toFixed(1)}V. Limites: <53V par panneau et <=160V au total.` : `Panel Voc ${panelVoc.toFixed(1)}V, series Voc ${totalVoc.toFixed(1)}V. Limits are <53V each and <=160V total.`;
+        } else if (totalVoc >= OPTIMAL_WARN) {
+          line.classList.add("status-warn");
+          line.textContent = isFrench() ? "Conforme mais proche de la limite maximale de Voc." : "Compliant but near maximum Voc limit.";
+          detail.textContent = isFrench() ? `La Voc serie ${totalVoc.toFixed(1)}V est proche de 160V. Gardez les cables courts et inspectez les conditions.` : `Series Voc ${totalVoc.toFixed(1)}V is close to 160V. Keep cable run short and inspect conditions.`;
+        } else {
+          line.classList.add("status-safe");
+          line.textContent = isFrench() ? "Configuration Voc conforme." : "Compliant Voc configuration.";
+          detail.textContent = isFrench() ? `Voc panneau ${panelVoc.toFixed(1)}V et Voc serie ${totalVoc.toFixed(1)}V sont dans les limites.` : `Panel Voc ${panelVoc.toFixed(1)}V and series Voc ${totalVoc.toFixed(1)}V are within limits.`;
+        }
+
+        const mpptCheck = totalVmp === null
+          ? (isFrench() ? "Saisissez Vmp pour verifier la plage MPPT." : "Enter Vmp to check MPPT range.")
+          : totalVmp < MPPT_MIN
+            ? (isFrench() ? `Le Vmp serie ${totalVmp.toFixed(1)}V est sous la plage MPPT (${MPPT_MIN}V).` : `Series Vmp ${totalVmp.toFixed(1)}V is below MPPT lower range (${MPPT_MIN}V).`)
+            : totalVmp > MPPT_MAX
+              ? (isFrench() ? `Le Vmp serie ${totalVmp.toFixed(1)}V est au-dessus de la plage MPPT (${MPPT_MAX}V).` : `Series Vmp ${totalVmp.toFixed(1)}V is above MPPT upper range (${MPPT_MAX}V).`)
+              : (isFrench() ? `Le Vmp serie ${totalVmp.toFixed(1)}V est dans la plage MPPT (${MPPT_MIN}-${MPPT_MAX}V).` : `Series Vmp ${totalVmp.toFixed(1)}V is inside MPPT range (${MPPT_MIN}-${MPPT_MAX}V).`);
+
+        const currentCheck = panelImp === null
+          ? (isFrench() ? "Saisissez Imp pour valider la limite de courant d'entree." : "Enter Imp to validate input current limit.")
+          : panelImp > MAX_INPUT_CURRENT
+            ? (isFrench() ? `Imp ${panelImp.toFixed(1)}A depasse le courant d'entree max de ${MAX_INPUT_CURRENT}A.` : `Imp ${panelImp.toFixed(1)}A exceeds ${MAX_INPUT_CURRENT}A maximum input current.`)
+            : (isFrench() ? `Imp ${panelImp.toFixed(1)}A est dans la limite de ${MAX_INPUT_CURRENT}A.` : `Imp ${panelImp.toFixed(1)}A is within ${MAX_INPUT_CURRENT}A maximum input current.`);
+
+        document.getElementById("pvEngineering").innerHTML = `
+          <p><strong>${isFrench() ? "Explication" : "Practical guidance"}:</strong> ${isFrench() ? "Validez les limites Voc et la plage MPPT avant cablage puis avant mise en service." : "Validate Voc limits and MPPT range before wiring and again before commissioning."}</p>
+          <div class="formula-block">
+            <p class="formula-line">V<sub>oc,total</sub> = V<sub>oc,panel</sub> × N<sub>series</sub></p>
+            <p class="formula-line">V<sub>oc,panel</sub> &lt; ${MAX_PANEL_VOC}V, V<sub>oc,total</sub> &lt;= ${MAX_VOC}V</p>
+            <p class="formula-line">V<sub>mp,total</sub> = V<sub>mp,panel</sub> × N<sub>series</sub></p>
+            <p class="formula-line">${totalVoc === null ? (isFrench() ? "Calcul en attente de saisie." : "Computed value waits for input.") : `${panelVoc.toFixed(1)} × ${seriesQty} = ${totalVoc.toFixed(1)}V`}</p>
+          </div>
+          <p><strong>MPPT ${isFrench() ? "Controle" : "Check"}:</strong> ${mpptCheck}</p>
+          <p><strong>${isFrench() ? "Controle courant" : "Current Check"}:</strong> ${currentCheck}</p>
+        `;
+      }
+
+      function renderChecklist() {
+        const checklist = document.getElementById("checklist");
+        checklist.innerHTML = "";
+
+        checklistItems.forEach((item) => {
+          const li = document.createElement("li");
+          li.className = "check-item";
+          li.innerHTML = `
+            <input type="checkbox" id="${item.id}" ${state.checklist[item.id] ? "checked" : ""} />
+            <label for="${item.id}">${tt(item.label)}</label>
+          `;
+          const input = li.querySelector("input");
+          input.addEventListener("change", () => {
+            state.checklist[item.id] = input.checked;
+            saveState();
+            renderChecklist();
+          });
+          checklist.appendChild(li);
+        });
+
+        const done = checklistItems.filter((item) => state.checklist[item.id]).length;
+        const complete = done === checklistItems.length;
+        const progress = document.getElementById("checklistProgress");
+        progress.innerHTML = complete
+          ? `<span style="color: var(--ok);">${done}/${checklistItems.length} ${isFrench() ? "termines" : "complete"} · ${isFrench() ? "Base de mise en service validee" : "Commissioning baseline pass"}</span>`
+          : `${done}/${checklistItems.length} ${isFrench() ? "termines" : "complete"}`;
+
+        document.getElementById("checklistEngineering").innerHTML = `
+          <p><strong>${isFrench() ? "Regle 1" : "Rule 1"}:</strong> ${tt("Never exceed 160V total series Voc.")}</p>
+          <p><strong>${isFrench() ? "Regle 2" : "Rule 2"}:</strong> ${tt("Always keep South orientation with 10 degree tilt.")}</p>
+          <p><strong>${isFrench() ? "Regle 3" : "Rule 3"}:</strong> ${isFrench() ? "Disjoncteur 18-35A obligatoire entre le champ PV et le controleur." : "Mandatory 18-35A breaker between array and controller."}</p>
+          <p><strong>${isFrench() ? "Regle 4" : "Rule 4"}:</strong> ${tt("Never connect dirty or wet MC4 connectors.")}</p>
+        `;
+      }
+
+      function recordMaintenance(actionKey) {
+        const timestamp = new Date().toISOString();
+        state.maintenance.lastActions[actionKey] = timestamp;
+        state.maintenance.history.unshift({
+          action: actionKey,
+          label: maintenanceActions[actionKey],
+          timestamp
+        });
+        state.maintenance.history = state.maintenance.history.slice(0, 25);
+        saveState();
+        renderMaintenance();
+      }
+
+      function formatDate(value) {
+        if (!value) return "Not logged";
+        return new Date(value).toLocaleString();
+      }
+
+      function ageSince(value) {
+        if (!value) return isFrench() ? "Aucune maintenance pour le moment" : "No maintenance yet";
+        const delta = Date.now() - new Date(value).getTime();
+        const hours = Math.floor(delta / 3600000);
+        if (hours < 1) return isFrench() ? "Moins d'une heure" : "Less than 1 hour ago";
+        if (hours < 24) return isFrench() ? `Il y a ${hours} h` : `${hours} hour(s) ago`;
+        const days = Math.floor(hours / 24);
+        return isFrench() ? `Il y a ${days} jour(s)` : `${days} day(s) ago`;
+      }
+
+      function renderMaintenance() {
+        const actionsWrap = document.getElementById("maintenanceActions");
+        if (!actionsWrap.children.length) {
+          Object.entries(maintenanceActions).forEach(([key, label]) => {
+            const button = document.createElement("button");
+            button.className = "btn btn-primary";
+            button.type = "button";
+            button.textContent = tt(label);
+            button.addEventListener("click", () => recordMaintenance(key));
+            actionsWrap.appendChild(button);
+          });
+        } else {
+          Array.from(actionsWrap.children).forEach((node, idx) => {
+            const keys = Object.keys(maintenanceActions);
+            const key = keys[idx];
+            if (node instanceof HTMLButtonElement && key) {
+              node.textContent = tt(maintenanceActions[key]);
+            }
+          });
+        }
+
+        const board = document.getElementById("maintenanceBoard");
+        const entries = Object.entries(maintenanceActions).map(([key, label]) => ({
+          label: tt(label),
+          timestamp: state.maintenance.lastActions[key]
+        }));
+        const timestamps = entries.map((item) => item.timestamp).filter(Boolean).sort().reverse();
+        const latest = timestamps.length ? timestamps[0] : null;
+        board.innerHTML = `
+          <div class="board-row"><strong>${isFrench() ? "Derniere maintenance enregistree" : "Last logged maintenance"}</strong><span>${formatDate(latest)}</span></div>
+          <div class="board-row"><strong>${isFrench() ? "Anciennete maintenance" : "Maintenance age"}</strong><span>${ageSince(latest)}</span></div>
+          ${entries.map((entry) => `<div class="board-row"><strong>${entry.label}</strong><span>${formatDate(entry.timestamp)}</span></div>`).join("")}
+        `;
+
+        const history = document.getElementById("maintenanceHistory");
+        history.innerHTML = "";
+        if (!state.maintenance.history.length) {
+          const li = document.createElement("li");
+          li.textContent = isFrench() ? "Aucun journal de maintenance pour le moment." : "No maintenance logs yet.";
+          history.appendChild(li);
+        } else {
+          state.maintenance.history.slice(0, 8).forEach((item) => {
+            const li = document.createElement("li");
+            li.textContent = `${tt(item.label)} · ${formatDate(item.timestamp)}`;
+            history.appendChild(li);
+          });
+        }
+
+        document.getElementById("maintenanceEngineering").innerHTML = `
+          <p><strong>${isFrench() ? "Nettoyage" : "Cleaning"}:</strong> ${isFrench() ? "La poussiere et les depots reduisent directement la production, nettoyez regulierement les modules." : "Dust and droppings directly reduce output, so clean modules routinely."}</p>
+          <p><strong>${isFrench() ? "Vegetation" : "Vegetation"}:</strong> ${isFrench() ? "Evitez toute croissance generant de l'ombre au fil des saisons." : "Prevent shade growth across all seasons."}</p>
+          <p><strong>${isFrench() ? "Integrite connecteurs" : "Connector integrity"}:</strong> ${isFrench() ? "Le risque de resistance et d'echauffement augmente avec des contacts MC4 sales." : "Resistance and heating risk increase with dirty MC4 contacts."}</p>
+          <p><strong>${isFrench() ? "Supervision" : "Monitoring"}:</strong> ${isFrench() ? "Utilisez le diagnostic applicatif pour isoler rapidement les defauts." : "Use app diagnostics for early fault isolation."}</p>
+        `;
+      }
+
+      function getClosestDuePhase() {
+        const now = Date.now();
+        const datedPhases = roadmapPhases
+          .map((phase) => {
+            const dueRaw = state.phaseDueDates[phase.id];
+            if (!dueRaw) return null;
+            return {
+              phase,
+              dueRaw,
+              dueAt: new Date(`${dueRaw}T23:59:59`).getTime()
+            };
+          })
+          .filter(Boolean)
+          .sort((a, b) => a.dueAt - b.dueAt);
+
+        if (!datedPhases.length) return null;
+        const nextUpcoming = datedPhases.find((entry) => entry.dueAt >= now);
+        if (nextUpcoming) return { ...nextUpcoming, overdue: false };
+        return { ...datedPhases[datedPhases.length - 1], overdue: true };
+      }
+
+      function formatCountdown(targetDate) {
+        const diff = targetDate.getTime() - Date.now();
+        if (diff <= 0) return isFrench() ? "A echeance" : "Due now";
+        const days = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const mins = Math.floor((diff % 3600000) / 60000);
+        return `${days}d ${String(hours).padStart(2, "0")}h ${String(mins).padStart(2, "0")}m`;
+      }
+
+      function renderCountdown() {
+        const closest = getClosestDuePhase();
+        if (!closest) {
+          nextPhaseCountdownValue.textContent = tt("Set due dates");
+          trackerNextDueNote.textContent = isFrench() ? "Aucune date d'echeance definie. Ajoutez des dates ci-dessous." : "No due dates set yet. Add due dates for phases below.";
+          return;
+        }
+        const now = Date.now();
+        const diffMs = closest.dueAt - now;
+        const dayMs = 86400000;
+        if (closest.overdue) {
+          const overdueDays = Math.max(1, Math.ceil((now - closest.dueAt) / dayMs));
+          nextPhaseCountdownValue.textContent = isFrench() ? `${overdueDays} jour(s) de retard pour la phase ${closest.phase.id}` : `${overdueDays} day(s) overdue for phase ${closest.phase.id}`;
+          trackerNextDueNote.textContent = isFrench() ? `Echeance la plus proche: Phase ${closest.phase.id} (${tt(closest.phase.name)}) le ${new Date(`${closest.dueRaw}T00:00:00`).toLocaleDateString()}.` : `Closest due was Phase ${closest.phase.id} (${closest.phase.name}) on ${new Date(`${closest.dueRaw}T00:00:00`).toLocaleDateString()}.`;
+          return;
+        }
+        const daysLeft = Math.max(0, Math.ceil(diffMs / dayMs));
+        nextPhaseCountdownValue.textContent = isFrench() ? `${daysLeft} jour(s) avant la phase ${closest.phase.id}` : `${daysLeft} day(s) to phase ${closest.phase.id}`;
+        trackerNextDueNote.textContent = isFrench() ? `Echeance la plus proche: Phase ${closest.phase.id} (${tt(closest.phase.name)}) le ${new Date(`${closest.dueRaw}T00:00:00`).toLocaleDateString()}.` : `Closest due: Phase ${closest.phase.id} (${closest.phase.name}) on ${new Date(`${closest.dueRaw}T00:00:00`).toLocaleDateString()}.`;
+      }
+
+      function renderPhaseTracker() {
+        const selectedBefore = execPhaseSelect.value || String(state.activePhase || currentPhaseId);
+        execPhaseSelect.innerHTML = roadmapPhases
+          .map((phase) => `<option value="${phase.id}">Phase ${phase.id} - ${tt(phase.name)}</option>`)
+          .join("");
+        execPhaseSelect.value = selectedBefore;
+        const selectedId = Number(execPhaseSelect.value || state.activePhase || currentPhaseId);
+        const due = state.phaseDueDates[selectedId] || "";
+        const stage = state.phaseStatuses[selectedId] || "plan";
+        execDueDate.value = due;
+        execStage.value = stage;
+
+        phaseActivityHistory.innerHTML = "";
+        if (!state.phaseActivityHistory.length) {
+          const li = document.createElement("li");
+          li.textContent = isFrench() ? "Aucune activite de phase pour le moment." : "No phase activity yet.";
+          phaseActivityHistory.appendChild(li);
+        } else {
+          state.phaseActivityHistory.slice(0, 10).forEach((entry) => {
+            const li = document.createElement("li");
+            li.textContent = `${entry.time} · ${entry.phase} → ${stageLabel((entry.stage || "").toLowerCase())}${entry.dueDate ? ` · ${isFrench() ? "Echeance" : "Due"} ${entry.dueDate}` : ""}`;
+            phaseActivityHistory.appendChild(li);
+          });
+        }
+      }
+
+      function savePhaseUpdate(phaseId, dueDate, stage) {
+        const phase = roadmapPhases.find((item) => item.id === phaseId);
+        if (!phase) return;
+        state.phaseDueDates[phaseId] = dueDate;
+        state.phaseStatuses[phaseId] = stage;
+        state.phaseActivityHistory.unshift({
+          phase: `Phase ${phase.id}`,
+          stage,
+          dueDate: dueDate || null,
+          time: new Date().toLocaleString()
+        });
+        state.phaseActivityHistory = state.phaseActivityHistory.slice(0, 30);
+        state.activePhase = phaseId;
+        saveState();
+        renderCurrentPhase();
+        renderPhaseNav();
+        renderPhaseCards();
+        renderPhaseTracker();
+        renderCountdown();
+      }
+
+      function initSpotlight() {
+        if (prefersReducedMotion()) return;
+        const hero = document.getElementById("hero");
+        const spot = document.getElementById("heroSpotlight");
+        let rafId = null;
+
+        hero.addEventListener("pointermove", (event) => {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(() => {
+            const rect = hero.getBoundingClientRect();
+            spot.style.setProperty("--spot-x", `${event.clientX - rect.left}px`);
+            spot.style.setProperty("--spot-y", `${event.clientY - rect.top}px`);
+            spot.style.opacity = "1";
+          });
+        });
+
+        hero.addEventListener("pointerleave", () => {
+          spot.style.opacity = "0";
+        });
+      }
+
+      function initParticles() {
+        if (prefersReducedMotion()) return;
+        const wrap = document.getElementById("heroParticles");
+        for (let i = 0; i < 16; i += 1) {
+          const dot = document.createElement("span");
+          dot.className = "particle";
+          dot.style.left = `${Math.random() * 100}%`;
+          dot.style.top = `${Math.random() * 100}%`;
+          dot.style.animationDuration = `${7 + Math.random() * 10}s`;
+          dot.style.animationDelay = `${Math.random() * 6}s`;
+          dot.style.opacity = String(0.14 + Math.random() * 0.3);
+          wrap.appendChild(dot);
+        }
+      }
+
+      function initTiltCards() {
+        if (prefersReducedMotion()) return;
+        document.querySelectorAll(".tilt-card").forEach((card) => {
+          card.addEventListener("pointermove", (event) => {
+            const rect = card.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+            card.style.setProperty("--tilt-x", `${y * -5}deg`);
+            card.style.setProperty("--tilt-y", `${x * 5}deg`);
+          });
+          card.addEventListener("pointerleave", () => {
+            card.style.setProperty("--tilt-x", "0deg");
+            card.style.setProperty("--tilt-y", "0deg");
+          });
+        });
+      }
+
+      function initScrollReveal() {
+        if (prefersReducedMotion()) {
+          document.querySelectorAll(".reveal-on-scroll").forEach((node) => node.classList.add("is-visible"));
+          return;
+        }
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+        );
+        document.querySelectorAll(".reveal-on-scroll").forEach((node) => observer.observe(node));
+      }
+
+      function bindEvents() {
+        viewDashboardBtn.addEventListener("click", () => setView("dashboard"));
+        viewExecutionBtn.addEventListener("click", () => setView("execution"));
+        quickDashboardBtn.addEventListener("click", () => setView("dashboard"));
+        languageToggleBtn.addEventListener("click", () => {
+          state.language = isFrench() ? "en" : "fr";
+          saveState();
+          renderAll();
+        });
+
+        engineeringMode.addEventListener("change", () => {
+          state.engineeringMode = engineeringMode.checked;
+          document.body.classList.toggle("engineering-on", state.engineeringMode);
+          saveState();
+        });
+
+        Object.entries(pvInputs).forEach(([key, input]) => {
+          input.addEventListener("input", () => {
+            state.pv[key] = input.value;
+            saveState();
+            renderPV();
+          });
+        });
+
+        execPhaseSelect.addEventListener("change", () => {
+          renderPhaseTracker();
+        });
+
+        execSaveBtn.addEventListener("click", () => {
+          const phaseId = Number(execPhaseSelect.value);
+          savePhaseUpdate(phaseId, execDueDate.value || "", execStage.value);
+        });
+      }
+
+      function renderAll() {
+        if (state.language !== "fr" && state.language !== "en") {
+          state.language = "en";
+        }
+        engineeringMode.checked = Boolean(state.engineeringMode);
+        document.body.classList.toggle("engineering-on", Boolean(state.engineeringMode));
+        applyStaticTranslations();
+        renderViews();
+        renderCurrentPhase();
+        renderPhaseNav();
+        renderPhaseCards();
+        renderExecutionSections();
+        renderPV();
+        renderChecklist();
+        renderMaintenance();
+        renderPhaseTracker();
+        renderCountdown();
+      }
+
+      bindEvents();
+      renderAll();
+      initParticles();
+      initSpotlight();
+      initScrollReveal();
+      initTiltCards();
+      setInterval(() => {
+        renderCountdown();
+      }, 1000);
+    })();
+  </script>
+</body>
+</html>
