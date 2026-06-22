@@ -365,10 +365,11 @@
       <p class="eyebrow">SunRoots Dubreka</p>
       <div class="control-row">
         <label class="mode-toggle" for="engineeringModeReport">
-          Engineering Mode
+          <span id="engineeringModeLabelReport">Engineering Mode</span>
           <input id="engineeringModeReport" type="checkbox" />
         </label>
-        <a class="btn btn-secondary" href="index.html">Back to Dashboard</a>
+        <button type="button" class="btn btn-secondary" id="languageToggleReport">FR</button>
+        <a class="btn btn-secondary" id="backDashboardLink" href="index.html">Back to Dashboard</a>
         <button type="button" class="btn btn-primary" id="downloadPdfBtn">Print Guide</button>
       </div>
     </div>
@@ -626,11 +627,199 @@ V_{series} = \sum V_i,\quad I_{series} \approx I_{panel}</div>
       "use strict";
       const ENGINEERING_KEY = "sunroots_report_engineering_mode";
       const modeToggle = document.getElementById("engineeringModeReport");
+      const engineeringModeLabel = document.getElementById("engineeringModeLabelReport");
+      const languageToggleButton = document.getElementById("languageToggleReport");
+      const backDashboardLink = document.getElementById("backDashboardLink");
       const downloadButton = document.getElementById("downloadPdfBtn");
+      const pageMain = document.querySelector("main.page");
+      const originalMainHtml = pageMain.innerHTML;
+      const originalTitle = document.title;
+
+      let reportLanguage = "en";
+
+      const FR_MAP = {
+        "SunRoots Dubreka Solar Irrigation Pilot": "Pilote d'irrigation solaire SunRoots Dubreka",
+        "Print Guide & Electrical Installation Guide": "Guide d'impression et guide d'installation electrique",
+        "Electrical & Solar PV Components Only": "Composants electriques et solaires PV uniquement",
+        "Project Location:": "Localisation du projet :",
+        "Quick Field Sequence": "Sequence rapide terrain",
+        "Confirm panel Voc values and ensure total series Voc stays below 160 V.": "Verifier les valeurs Voc des panneaux et s'assurer que la Voc totale en serie reste inferieure a 160 V.",
+        "Install three identical 500-600 W modules in series and keep orientation strictly South at 10 degrees.": "Installer trois modules identiques de 500 a 600 W en serie et garder une orientation strictement au sud a 10 degres.",
+        "Install one 18-35 A DC breaker between array and controller before commissioning.": "Installer un disjoncteur DC de 18 a 35 A entre le champ PV et le controleur avant la mise en service.",
+        "Verify clean/dry MC4 connectors, then start and confirm pump operation under sunlight.": "Verifier que les connecteurs MC4 sont propres et secs, puis demarrer et confirmer le fonctionnement de la pompe au soleil.",
+        "1. System Overview": "1. Vue d'ensemble du systeme",
+        "System Description": "Description du systeme",
+        "The irrigation system is powered directly by solar energy without batteries.": "Le systeme d'irrigation est alimente directement par l'energie solaire sans batteries.",
+        "Main Components": "Composants principaux",
+        "Operating Principle": "Principe de fonctionnement",
+        "Sunlight produces electricity from the solar panels.": "La lumiere solaire produit de l'electricite a partir des panneaux.",
+        "The three panels supply DC power to the Ennos MPPT controller.": "Les trois panneaux alimentent le controleur MPPT Ennos en courant continu.",
+        "The controller automatically adjusts to obtain maximum power from the solar array.": "Le controleur s'ajuste automatiquement pour obtenir la puissance maximale du champ PV.",
+        "The controller powers the pump directly.": "Le controleur alimente directement la pompe.",
+        "Pump performance increases with available sunlight.": "La performance de pompage augmente avec l'ensoleillement disponible.",
+        "No batteries are required.": "Aucune batterie n'est requise.",
+        "2. Solar Panel Selection & Installation": "2. Selection et installation des panneaux solaires",
+        "Solar Panel Requirements": "Exigences des panneaux solaires",
+        "Use three identical solar panels rated between 500 W and 600 W.": "Utiliser trois panneaux solaires identiques de 500 a 600 W.",
+        "Critical Voltage Requirement": "Exigence critique de tension",
+        "Maximum controller input voltage (Voc): 160 V": "Tension d'entree maximale du controleur (Voc) : 160 V",
+        "Each panel MUST have an Open Circuit Voltage (Voc) below 53 V": "Chaque panneau DOIT avoir une tension a vide (Voc) inferieure a 53 V",
+        "Example:": "Exemple :",
+        "Never exceed 160 V.": "Ne jamais depasser 160 V.",
+        "For best performance, select panels with a combined series Voc as close as possible to 160 V while remaining below the limit.": "Pour de meilleures performances, choisir des panneaux dont la Voc serie combinee est proche de 160 V tout en restant sous la limite.",
+        "Panel Orientation": "Orientation des panneaux",
+        "Direction": "Direction",
+        "Face the solar panels strictly South.": "Orienter les panneaux solaires strictement au sud.",
+        "This provides the highest annual energy production in Dubreka.": "Cela offre la production energetique annuelle la plus elevee a Dubreka.",
+        "Tilt Angle": "Angle d'inclinaison",
+        "Set the panel tilt to: 10 degrees": "Regler l'inclinaison des panneaux a : 10 degres",
+        "This corresponds approximately to the local latitude (9.8 degrees) and provides optimal year-round performance.": "Cela correspond approximativement a la latitude locale (9,8 degres) et assure des performances optimales toute l'annee.",
+        "Shading": "Ombrage",
+        "Solar panels must receive full sunlight.": "Les panneaux solaires doivent recevoir un ensoleillement total.",
+        "Avoid:": "Eviter :",
+        "Any object creating shadows": "Tout objet creant de l'ombre",
+        "Even a small shadow can significantly reduce pump performance.": "Meme une petite ombre peut reduire fortement les performances de pompage.",
+        "If vegetation cannot be removed, install longer cables and move the solar array to a better location.": "Si la vegetation ne peut pas etre retiree, installer des cables plus longs et deplacer le champ PV vers un meilleur emplacement.",
+        "3. Electrical Wiring & Protection": "3. Cablage electrique et protection",
+        "Series Connection": "Connexion en serie",
+        "Connect the three panels in series.": "Connecter les trois panneaux en serie.",
+        "Connection order:": "Ordre de connexion :",
+        "Series connection increases voltage while maintaining the same current.": "La connexion en serie augmente la tension tout en conservant le meme courant.",
+        "DC Breaker (Mandatory)": "Disjoncteur DC (obligatoire)",
+        "Purpose": "Objectif",
+        "Safe system isolation": "Isolation securisee du systeme",
+        "Protection during maintenance": "Protection pendant la maintenance",
+        "Prevention of short-circuit sparks": "Prevention des etincelles de court-circuit",
+        "Protection of the MPPT controller": "Protection du controleur MPPT",
+        "The system must never be installed without this breaker.": "Le systeme ne doit jamais etre installe sans ce disjoncteur.",
+        "Breaker Location": "Emplacement du disjoncteur",
+        "Install the breaker:": "Installer le disjoncteur :",
+        "As close as possible to the solar panels": "Le plus pres possible des panneaux solaires",
+        "Inside a weather-protected enclosure": "Dans un boitier protege des intemperies",
+        "This minimizes overvoltage risks and improves system safety.": "Cela minimise les risques de surtension et ameliore la securite du systeme.",
+        "Cable Length": "Longueur de cable",
+        "Longer cables may increase electrical stress and reduce reliability.": "Des cables plus longs peuvent augmenter les contraintes electriques et reduire la fiabilite.",
+        "MC4 Connector Handling": "Manipulation des connecteurs MC4",
+        "Always keep MC4 connectors:": "Toujours garder les connecteurs MC4 :",
+        "Clean": "Propres",
+        "Dry": "Secs",
+        "Free from dust": "Sans poussiere",
+        "Free from mud": "Sans boue",
+        "Never leave loose connectors on the ground.": "Ne jamais laisser des connecteurs libres au sol.",
+        "Dirty connectors can:": "Les connecteurs sales peuvent :",
+        "Prevent proper electrical contact": "Empecher un bon contact electrique",
+        "Create resistance": "Creer de la resistance",
+        "Cause overheating": "Provoquer une surchauffe",
+        "Produce electrical faults": "Produire des defauts electriques",
+        "Reduce system performance": "Reduire les performances du systeme",
+        "4. Operation & Maintenance": "4. Exploitation et maintenance",
+        "Solar Module Cleaning": "Nettoyage des modules solaires",
+        "Inspect regularly.": "Inspecter regulierement.",
+        "Remove:": "Retirer :",
+        "Clean using:": "Nettoyer avec :",
+        "Soft wet cloth or sponge": "Chiffon doux humide ou eponge",
+        "Clean water": "Eau propre",
+        "Do not use abrasive materials or harsh chemicals.": "Ne pas utiliser de materiaux abrasifs ou de produits chimiques agressifs.",
+        "Clean modules produce more power.": "Des modules propres produisent plus d'energie.",
+        "Vegetation Management": "Gestion de la vegetation",
+        "Inspect the area regularly.": "Inspecter la zone regulierement.",
+        "Trim:": "Tailler :",
+        "Prevent any new shading throughout the year.": "Eviter tout nouvel ombrage durant toute l'annee.",
+        "System Monitoring": "Suivi du systeme",
+        "The Ennos controller includes:": "Le controleur Ennos comprend :",
+        "LED display": "Affichage LED",
+        "Bluetooth communication": "Communication Bluetooth",
+        "Use the Innovex REMOT / Ennos App to:": "Utiliser l'application Innovex REMOT / Ennos pour :",
+        "Check operating status": "Verifier l'etat de fonctionnement",
+        "Monitor solar input": "Surveiller l'entree solaire",
+        "View pump performance": "Voir les performances de la pompe",
+        "Identify faults": "Identifier les defauts",
+        "Support troubleshooting": "Aider au diagnostic",
+        "Check system status regularly, especially during the dry season.": "Verifier regulierement l'etat du systeme, surtout pendant la saison seche.",
+        "5. Safety Golden Rules": "5. Regles d'or de securite",
+        "Rule 1 - Never Exceed 160 V": "Regle 1 - Ne jamais depasser 160 V",
+        "Before installation:": "Avant l'installation :",
+        "Verify the Voc of each solar panel.": "Verifier la Voc de chaque panneau solaire.",
+        "Ensure the total series Voc is below 160 V.": "S'assurer que la Voc totale en serie est inferieure a 160 V.",
+        "Exceeding 160 V can permanently damage the controller.": "Depasser 160 V peut endommager definitivement le controleur.",
+        "Rule 2 - Face South at 10 Degrees": "Regle 2 - Orientation sud a 10 degres",
+        "Always install the solar array:": "Toujours installer le champ solaire :",
+        "Facing South": "Oriente au sud",
+        "Tilted at 10 degrees": "Incline a 10 degres",
+        "Incorrect orientation reduces water production.": "Une orientation incorrecte reduit la production d'eau.",
+        "Rule 3 - Install the DC Breaker": "Regle 3 - Installer le disjoncteur DC",
+        "Never bypass or remove this protection device.": "Ne jamais contourner ni retirer ce dispositif de protection.",
+        "Rule 4 - Keep MC4 Connectors Clean": "Regle 4 - Garder les connecteurs MC4 propres",
+        "Never place MC4 connectors on:": "Ne jamais poser les connecteurs MC4 sur :",
+        "Wet ground": "Sol humide",
+        "Always inspect and clean connectors before making electrical connections.": "Toujours inspecter et nettoyer les connecteurs avant les raccordements electriques.",
+        "Clean connectors ensure reliable operation and prevent electrical faults.": "Des connecteurs propres assurent un fonctionnement fiable et previennent les defauts electriques.",
+        "Installation Checklist": "Liste de controle d'installation",
+        "Three identical 500-600 W solar panels installed": "Trois panneaux solaires identiques de 500 a 600 W installes",
+        "Each panel Voc is below 53 V": "La Voc de chaque panneau est inferieure a 53 V",
+        "Total series Voc is below 160 V": "La Voc totale en serie est inferieure a 160 V",
+        "Panels connected in series": "Panneaux connectes en serie",
+        "18-35 A DC breaker installed near the solar array": "Disjoncteur DC de 18 a 35 A installe pres du champ solaire",
+        "Cable length less than 15 m when operating near 150-160 V": "Longueur de cable inferieure a 15 m en fonctionnement proche de 150 a 160 V",
+        "Panels face South": "Les panneaux font face au sud",
+        "Panel tilt set to 10 degrees": "Inclinaison des panneaux reglee a 10 degres",
+        "No shading on the modules": "Aucun ombrage sur les modules",
+        "MC4 connectors are clean and fully locked": "Les connecteurs MC4 sont propres et completement verrouilles",
+        "LED display and Bluetooth monitoring verified": "Affichage LED et suivi Bluetooth verifies",
+        "System tested under sunlight and pump operation confirmed": "Systeme teste au soleil et fonctionnement de la pompe confirme",
+        "Back to Dashboard": "Retour au tableau de bord",
+        "Print Guide": "Imprimer le guide",
+        "Engineering Mode": "Mode ingenierie"
+      };
 
       function setEngineeringMode(enabled) {
         document.body.classList.toggle("engineering-mode", enabled);
         localStorage.setItem(ENGINEERING_KEY, String(enabled));
+      }
+
+      function normalizeText(text) {
+        return text.replace(/\s+/g, " ").trim();
+      }
+
+      function translateNodeText(root) {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+
+        nodes.forEach((node) => {
+          if (!node.parentElement) return;
+          const tag = node.parentElement.tagName;
+          if (tag === "SCRIPT" || tag === "STYLE") return;
+          const raw = node.nodeValue || "";
+          const trimmed = raw.trim();
+          if (!trimmed) return;
+          const key = normalizeText(trimmed);
+          const translated = FR_MAP[key];
+          if (!translated) return;
+          const leading = raw.match(/^\s*/)?.[0] || "";
+          const trailing = raw.match(/\s*$/)?.[0] || "";
+          node.nodeValue = `${leading}${translated}${trailing}`;
+        });
+      }
+
+      function applyLanguage(language) {
+        reportLanguage = language === "fr" ? "fr" : "en";
+        document.documentElement.lang = reportLanguage;
+        pageMain.innerHTML = originalMainHtml;
+
+        engineeringModeLabel.textContent = reportLanguage === "fr" ? "Mode ingenierie" : "Engineering Mode";
+        backDashboardLink.textContent = reportLanguage === "fr" ? "Retour au tableau de bord" : "Back to Dashboard";
+        downloadButton.textContent = reportLanguage === "fr" ? "Imprimer le guide" : "Print Guide";
+        languageToggleButton.textContent = reportLanguage === "fr" ? "EN" : "FR";
+        document.title = reportLanguage === "fr" ? "Guide d'impression SunRoots Dubreka" : originalTitle;
+
+        if (reportLanguage === "fr") {
+          translateNodeText(pageMain);
+        }
+
+        const url = new URL(window.location.href);
+        url.searchParams.set("lang", reportLanguage);
+        window.history.replaceState({}, "", url.toString());
       }
 
       function initMode() {
@@ -648,6 +837,12 @@ V_{series} = \sum V_i,\quad I_{series} \approx I_{panel}</div>
       });
 
       downloadButton.addEventListener("click", downloadPdf);
+      languageToggleButton.addEventListener("click", () => {
+        applyLanguage(reportLanguage === "fr" ? "en" : "fr");
+      });
+
+      const initialLanguage = new URLSearchParams(window.location.search).get("lang");
+      applyLanguage(initialLanguage === "fr" ? "fr" : "en");
       initMode();
     })();
   </script>

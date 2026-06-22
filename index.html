@@ -1649,6 +1649,7 @@
         document.getElementById("heroTitle").textContent = tt("Dashboard and Execution Control Center");
         document.getElementById("heroLead").textContent = tt("Premium, field-ready interface for roadmap tracking, electrical safety validation, and execution monitoring for the Dubreka solar irrigation project.");
         viewExecutionBtn.textContent = tt("Open Execution Phase");
+        document.getElementById("openReportLink").setAttribute("href", isFrench() ? "final-report.html?lang=fr" : "final-report.html?lang=en");
         document.getElementById("openReportLink").textContent = tt("Print Guide");
         document.getElementById("currentPhaseTitle").textContent = tt("Current Phase");
         document.getElementById("currentPhaseBadge").textContent = tt("Roadmap Focus");
