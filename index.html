@@ -1751,13 +1751,29 @@
         renderViews();
       }
 
+      function updatePhaseCardActiveState() {
+        document.querySelectorAll(".phase-card").forEach((card) => {
+          const phaseId = Number(card.dataset.phase);
+          if (!phaseId) return;
+          const stage = state.phaseStatuses[phaseId] || "plan";
+          const stageText = stageLabel(stage);
+          const statusEl = card.querySelector(".phase-status");
+          if (!statusEl) return;
+          const isCurrent = phaseId === state.activePhase;
+          statusEl.className = isCurrent ? `phase-status ${stage} current` : `phase-status ${stage}`;
+          statusEl.textContent = isCurrent
+            ? `${stageText} · ${isFrench() ? "Actuelle" : "Current"}`
+            : stageText;
+        });
+      }
+
       function setActivePhase(phaseId) {
         state.activePhase = phaseId;
         saveState();
         renderCurrentPhase();
         renderPhaseNav();
-        renderPhaseCards();
-        renderCountdown();
+        updatePhaseCardActiveState();
+        renderPhaseTracker();
       }
 
       function renderViews() {
@@ -1874,13 +1890,20 @@
               return;
             }
             if (event.target.classList.contains("phase-card-btn")) {
+              setActivePhase(phase.id);
               card.classList.toggle("is-flipped");
+              return;
             }
+            if (event.target.closest("details, summary, input, select, label")) {
+              return;
+            }
+            setActivePhase(phase.id);
           });
 
           card.addEventListener("keydown", (event) => {
             if (event.key === "Enter" || event.key === " ") {
               event.preventDefault();
+              setActivePhase(phase.id);
               card.classList.toggle("is-flipped");
             }
             if (event.key === "Escape") {
@@ -2130,14 +2153,6 @@
           nextPhaseCountdownValue.textContent = tt("Set due dates");
           trackerNextDueNote.textContent = isFrench() ? "Aucune date d'echeance definie. Ajoutez des dates ci-dessous." : "No due dates set yet. Add due dates for phases below.";
           return;
-        }
-        if (!closest.overdue && state.activePhase !== closest.phase.id) {
-          state.activePhase = closest.phase.id;
-          saveState();
-          renderCurrentPhase();
-          renderPhaseNav();
-          renderPhaseCards();
-          renderPhaseTracker();
         }
         const now = Date.now();
         const diffMs = closest.dueAt - now;
