@@ -353,6 +353,21 @@
       right: 32px;
       margin: 0;
       z-index: 60;
+      background: rgba(12, 12, 15, 0.16);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-color: rgba(196, 163, 90, 0.2);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-top-pill:hover {
+      background: rgba(12, 12, 15, 0.24);
+      border-color: rgba(196, 163, 90, 0.34);
+    }
+
+    .hero-top-pill.reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
     }
 
     .stats-pill:hover {
