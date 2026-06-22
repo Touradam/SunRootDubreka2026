@@ -273,6 +273,8 @@
       font-family: "Cambria Math", "Times New Roman", Georgia, serif;
       color: var(--gold-light);
       white-space: pre-wrap;
+      line-height: 1.5;
+      overflow-x: auto;
       display: none;
     }
 
@@ -418,8 +420,8 @@
       </ol>
       <p><strong>No batteries are required.</strong></p>
       <div class="latex-block">\textbf{Direct-Drive Model}
-P_{solar}(t) -> MPPT -> P_{pump}(t)
-\eta_{storage} = 1 \text{ (water elevation instead of batteries)}</div>
+P_{solar}(t) \rightarrow MPPT \rightarrow P_{pump}(t)
+\eta_{storage} = 1 \quad \text{(water elevation instead of batteries)}</div>
     </section>
 
     <section class="section-card">
@@ -440,7 +442,7 @@ P_{solar}(t) -> MPPT -> P_{pump}(t)
       <p>For best performance, select panels with a combined series Voc as close as possible to 160 V while remaining below the limit.</p>
       <div class="latex-block">\textbf{Voltage Constraint}
 V_{oc,total} = V_{oc,1} + V_{oc,2} + V_{oc,3}
-V_{oc,total} < 160\text{V}, \quad V_{oc,panel} < 53\text{V}</div>
+V_{oc,total} < 160\,\text{V}, \quad V_{oc,panel} < 53\,\text{V}</div>
 
       <h3>Panel Orientation</h3>
       <h3>Direction</h3>
@@ -480,7 +482,8 @@ go to the DC breaker,
 then to the Ennos controller.</div>
       <p>Series connection increases voltage while maintaining the same current.</p>
       <div class="latex-block">\textbf{Series Property}
-V_{series} = \sum V_i,\quad I_{series} \approx I_{panel}</div>
+V_{series} = \sum V_i
+I_{series} \approx I_{panel}</div>
 
       <h3>DC Breaker (Mandatory)</h3>
       <p>Install one: <strong>18-35 A DC Electrical Breaker (MCB)</strong> between the solar array and the pump controller.</p>
