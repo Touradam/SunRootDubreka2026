@@ -2112,11 +2112,14 @@
       function formatCountdown(diffMs, phaseId, overdue) {
         const totalSeconds = Math.max(0, Math.floor(Math.abs(diffMs) / 1000));
         const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
+        const timePart = `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        const dayLabel = isFrench() ? (days === 1 ? "jour" : "jours") : (days === 1 ? "day" : "days");
         const base = isFrench()
-          ? `${days} jour, ${minutes} minute, ${seconds} seconde | phase#${phaseId}`
-          : `${days} day, ${minutes} minute, ${seconds} second | phase#${phaseId}`;
+          ? `${days} ${dayLabel} | ${timePart} | phase ${phaseId}`
+          : `${days} ${dayLabel} | ${timePart} | phase ${phaseId}`;
         if (!overdue) return base;
         return isFrench() ? `${base} (retard)` : `${base} (overdue)`;
       }
